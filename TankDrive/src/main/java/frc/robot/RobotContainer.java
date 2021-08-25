@@ -4,12 +4,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+
+
+import com.kauailabs.navx.frc.AHRS;
+
+
+
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.NavXGyro;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -27,7 +34,9 @@ public class RobotContainer {
 
   private final DriveTrain driveTrain;
   private final TankDrive tankDrive;
-  
+  private final AHRS ahrs;
+  private final NavXGyro navx;
+  private final DisplayMPX displayMPX;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -36,9 +45,17 @@ public class RobotContainer {
     tankDrive.addRequirements(driveTrain);
     driveTrain.setDefaultCommand(tankDrive);
     configureButtonBindings();
+
+    navx = new NavXGyro();
+    
+    ahrs = new AHRS(Constants.mxp_port);
+    displayMPX = new DisplayMPX(ahrs, navx);
+    displayMPX.addRequirements(navx);
+    navx.setDefaultCommand(displayMPX);
+    
   }
 
-  /**
+  /*
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link

@@ -28,7 +28,7 @@ public class TankDrive extends CommandBase {
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
     driveTrain.setRightMotor(rightY);
-    driveTrain.setLeftMotor(leftY);
+    driveTrain.setLeftMotor(leftY*.99);
     
   }
 
