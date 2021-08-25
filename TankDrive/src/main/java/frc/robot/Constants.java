@@ -15,9 +15,10 @@ package frc.robot;
 public final class Constants {
 
     public static final int xbox_port = 0;
-    public static final int right_motor_port = 0;
-    public static final int left_y_axis = 0;
-    public static final int right_y_axis = 0;
-    public static int left_motor_port;
-
+    public static final int right_motor_port = 4;
+    
+    public static final int left_y_axis = 1;
+    public static final int right_y_axis = 5;
+    public static final int left_motor_port = 0;
+    public static final double max_motor_percent = 0.2;
 }
