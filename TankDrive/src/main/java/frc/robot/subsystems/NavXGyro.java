@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class NavXGyro extends SubsystemBase {
+  public AHRS ahrs = ahrs = new AHRS(Constants.mxp_port);
   /** Creates a new NavXGyro. */
   public NavXGyro() {
     

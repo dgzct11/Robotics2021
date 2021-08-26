@@ -14,9 +14,9 @@ public class DisplayMPX extends CommandBase {
   /** Creates a new DisplayMPX. */
   private AHRS ahrs;
   private NavXGyro navx;
-  public DisplayMPX(AHRS a, NavXGyro n) {
+  public DisplayMPX(NavXGyro n) {
     // Use addRequirements() here to declare subsystem dependencies.
-    ahrs = a;
+    ahrs = n.ahrs;
     navx = n;
     addRequirements(navx);
   }

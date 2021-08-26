@@ -14,22 +14,37 @@ import frc.robot.Constants;
 public class DriveTrain extends SubsystemBase {
   TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
-  
+  public double currentLeft = 0;
+  public double currentRight = 0;
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     
   }
 
   public void setRightMotor(double speed){
-    rightSpeedC.set(ControlMode.PercentOutput, speed*Constants.max_motor_percent);
+    double value = speed*Constants.max_motor_percent;
+    rightSpeedC.set(ControlMode.PercentOutput, value);
+    currentRight = value;
   }
   public void setLeftMotor(double speed){
-    leftSpeedC.set(ControlMode.PercentOutput, -speed*Constants.max_motor_percent);
+    double value = -speed*Constants.max_motor_percent
+    leftSpeedC.set(ControlMode.PercentOutput,value );
+    currentLeft = -speed*Constants.max_motor_percent;
   }
 
   public void stop(){
     rightSpeedC.set(ControlMode.PercentOutput, 0);
     leftSpeedC.set(ControlMode.PercentOutput, 0);
+    currentLeft = 0;
+    currentRight = 0;
+  }
+  public void spin(double speed){
+    //pos speed is left
+    //neg speed is right
+    rightSpeedC.set(ControlMode.PercentOutput, speed);
+    currentLeft = speed;
+    currentRight = speed;
+    leftSpeedC.set(ControlMode.PercentOutput, speed);
   }
   @Override
   public void periodic() {
