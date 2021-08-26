@@ -27,7 +27,7 @@ public class DriveTrain extends SubsystemBase {
     currentRight = value;
   }
   public void setLeftMotor(double speed){
-    double value = -speed*Constants.max_motor_percent
+    double value = -speed*Constants.max_motor_percent;
     leftSpeedC.set(ControlMode.PercentOutput,value );
     currentLeft = -speed*Constants.max_motor_percent;
   }

@@ -3,11 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import frc.robot.Constants;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class NavXGyro extends SubsystemBase {
-  public AHRS ahrs = ahrs = new AHRS(Constants.mxp_port);
+  public AHRS ahrs  = new AHRS(Constants.mxp_port);
   /** Creates a new NavXGyro. */
   public NavXGyro() {
     

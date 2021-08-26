@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -14,23 +15,28 @@ public class TurnAngle extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
   private final double angle;
+  private XboxController xbox;
   /** Creates a new TankDrive. */
-  public TurnAngle(DriveTrain dt, NavXGyro n, double a) {
+  public TurnAngle(DriveTrain dt, NavXGyro n, double a, XboxController x) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     navx = n;
     angle = a;
+    xbox = x;
     addRequirements(driveTrain);
     addRequirements(navx);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(Constants.turned) this.end(true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(xbox.getAButtonPressed()){
     if(navx.ahrs.getAngle()>angle){
         //turn right
         driveTrain.spin(-1*Constants.spin_rate);
@@ -39,11 +45,7 @@ public class TurnAngle extends CommandBase {
         //turn left
         driveTrain.spin(Constants.spin_rate);
     }
-    double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
-    double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
-    driveTrain.setRightMotor(rightY);
-    driveTrain.setLeftMotor(leftY*.99);
-    
+  }
   }
 
   // Called once the command ends or is interrupted.
@@ -51,6 +53,7 @@ public class TurnAngle extends CommandBase {
   public void end(boolean interrupted) {
     driveTrain.setLeftMotor(0);
     driveTrain.setRightMotor(0);
+    Constants.turned = True;
   }
 
   // Returns true when the command should end.

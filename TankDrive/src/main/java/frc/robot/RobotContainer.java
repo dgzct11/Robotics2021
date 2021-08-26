@@ -12,8 +12,10 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DisplayMPX;
+import frc.robot.commands.DriveAll;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
@@ -37,21 +39,28 @@ public class RobotContainer {
   private final AHRS ahrs;
   private final NavXGyro navx;
   private final DisplayMPX displayMPX;
+  private final TurnAngle tn;
+  private final DriveAll drive;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+    
     driveTrain = new DriveTrain();
     tankDrive = new TankDrive(driveTrain);
     tankDrive.addRequirements(driveTrain);
     driveTrain.setDefaultCommand(tankDrive);
     configureButtonBindings();
-
     navx = new NavXGyro();
-    
+    drive = new DriveAll(driveTrain, navx, xbox_controller);
+   
+    tn = new TurnAngle(driveTrain, navx, 90, xbox_controller);
     ahrs = new AHRS(Constants.mxp_port);
-    displayMPX = new DisplayMPX(ahrs, navx);
+    displayMPX = new DisplayMPX(navx);
     displayMPX.addRequirements(navx);
-    navx.setDefaultCommand(displayMPX);
+    tn.addRequirements(navx);
+    tn.addRequirements(driveTrain);
+    navx.setDefaultCommand(drive);
+    
     
   }
 
