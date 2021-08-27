@@ -37,7 +37,7 @@ public class TurnAngle extends CommandBase {
   @Override
   public void execute() {
     
-    if(NavXGyro.ahrs.getAngle()>angle){
+    if(NavXGyro.ahrs.getYaw()>angle){
         //turn right
         driveTrain.spin(-1*Constants.spin_rate);
     }
@@ -51,14 +51,14 @@ public class TurnAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.setLeftMotor(0);
-    driveTrain.setRightMotor(0);
+    driveTrain.stop();
+    
     
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (NavXGyro.ahrs.getAngle() <= angle + Constants.angle_error && NavXGyro.ahrs.getAngle() >= angle - Constants.angle_error);
+    return (NavXGyro.ahrs.getYaw() <= angle + Constants.angle_error && NavXGyro.ahrs.getYaw() >= angle - Constants.angle_error);
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
@@ -34,8 +35,9 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void stop(){
-    rightSpeedC.set(ControlMode.PercentOutput, 0);
-    leftSpeedC.set(ControlMode.PercentOutput, 0);
+  
+    rightSpeedC.setNeutralMode(NeutralMode.Brake);
+    leftSpeedC.setNeutralMode(NeutralMode.Brake);
     currentLeft = 0;
     currentRight = 0;
   }

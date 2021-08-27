@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.NavXGyro;
 
 public class DisplayMPX extends CommandBase {
@@ -104,6 +105,7 @@ public class DisplayMPX extends CommandBase {
     /* Connectivity Debugging Support                                           */
     SmartDashboard.putNumber(   "IMU_Byte_Count",       ahrs.getByteCount());
     SmartDashboard.putNumber(   "IMU_Update_Count",     ahrs.getUpdateCount());
+    SmartDashboard.putNumber("Drive Mode", Constants.driveMode);
   }
 
   // Called once the command ends or is interrupted.
