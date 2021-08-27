@@ -11,15 +11,18 @@ import com.kauailabs.navx.frc.AHRS;
 
 
 import edu.wpi.first.wpilibj.XboxController;
+
 import frc.robot.commands.DisplayMPX;
-import frc.robot.commands.DriveAll;
-import frc.robot.commands.ExampleCommand;
+
+import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,8 +35,7 @@ public class RobotContainer {
 
   //devices
    public  static XboxController xbox_controller = new XboxController(Constants.xbox_port);
-  
-
+ 
   //subsystems
   private final NavXGyro navx;
   private final DriveTrain driveTrain;
@@ -42,13 +44,13 @@ public class RobotContainer {
   private final TankDrive tankDrive;
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
-  private final DriveAll drive;
+
 
 
   //Buttons
-  Button aButtonTurn90Left = new XboxControllerButton(xbox_controller, Constants.a_button_num);
-  Button bButtonTurn90Right = new XboxControllerButton(xbox_controller, Constants.b_button_num);
-  Button xButtonSwitchDrive = new XboxControllerButton(xbox_controller, Constants.x_button_num)
+  Button aButtonTurn90Left = new JoystickButton(xbox_controller, Constants.a_button_num);
+  Button bButtonTurn90Right = new JoystickButton(xbox_controller, Constants.b_button_num);
+  Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -59,8 +61,8 @@ public class RobotContainer {
     //commands
     tankDrive = new TankDrive(driveTrain);
     tankDrive.addRequirements(driveTrain);
-    drive = new DriveAll(driveTrain, navx, xbox_controller);
-    tn = new TurnAngle(driveTrain, navx, 90, xbox_controller);
+  
+    tn = new TurnAngle(driveTrain, 90);
     tn.addRequirements(navx);
     tn.addRequirements(driveTrain);
     displayMPX = new DisplayMPX(navx);
@@ -84,9 +86,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    aButtonTurn90Left.whenPressed(new TurnAngle(driveTrain, navx, 90, xbox_controller));
-    bButtonTurn90Right.whenPressed(new TurnAngle(driveTrain, navx, -90, xbox_controller));
-    xButtonSwitchDrive.whenPRessed(new SwitchDriveMode(driveTrain, navx));
+    aButtonTurn90Left.whenPressed(new TurnAngle(driveTrain, 90));
+    bButtonTurn90Right.whenPressed(new TurnAngle(driveTrain,  -90));
+    xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
   }
 
   /**
@@ -96,6 +98,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }

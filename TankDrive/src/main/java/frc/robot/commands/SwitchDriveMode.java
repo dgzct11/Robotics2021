@@ -6,14 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveTrain;
 
-public class SwitchToStraight extends CommandBase {
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.NavXGyro;
+
+public class SwitchDriveMode extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
   /** Creates a new TankDrive. */
-  public SwitchToStraight(DriveTrain dt, NavXGyro n) {
+  public SwitchDriveMode(DriveTrain dt, NavXGyro n) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     navx = n;
@@ -24,7 +25,7 @@ public class SwitchToStraight extends CommandBase {
   @Override
   public void initialize() {
     if(Constants.driveMode == 0){
-      driveTrain.setDefaultCommand(new TankDriveStraight(driveTrain, navx));
+      driveTrain.setDefaultCommand(new TankDriveStraight(driveTrain));
       Constants.driveMode = 1;
 
 
@@ -35,7 +36,7 @@ public class SwitchToStraight extends CommandBase {
     }
     else if (Constants.driveMode ==2){
       driveTrain.setDefaultCommand(new FieldOrientedDrive(driveTrain, navx));
-      Constans.driveMode = 0;
+      Constants.driveMode = 0;
     }
   }
 

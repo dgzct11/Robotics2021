@@ -35,15 +35,15 @@ public class FieldOrientedDrive extends CommandBase {
     double rightX = RobotContainer.xbox_controller.getRawAxis(Constants.right_x_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
     
-    double angle = Math.arctan(rightY/rightX);
+    double angle = Math.atan(rightY/rightX);
     if (rightX<0) angle -= 180;
-    speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
-    if(NavXGyro.navx.getAngle()<angle-Constants.angle_err){
+    double speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
+    if(NavXGyro.ahrs.getAngle()<angle-Constants.angle_error){
       //turn right
       driveTrain.spin(-speed);
       
     }
-    else if(NavXGyro.navx.getAngle()>angle+Constants.angle_err){
+    else if(NavXGyro.ahrs.getAngle()>angle+Constants.angle_error){
       //turn left
       driveTrain.spin(speed);
     }

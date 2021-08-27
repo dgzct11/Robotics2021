@@ -12,21 +12,21 @@ import frc.robot.subsystems.NavXGyro;
 
 public class TankDriveStraight extends CommandBase {
   private final DriveTrain driveTrain;
-  private final NavXGyro navx;
+  
   private double angle;
   /** Creates a new TankDrive. */
-  public TankDriveStraight(DriveTrain dt, NavXGyro n) {
+  public TankDriveStraight(DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
-    navx = n;
+   
     addRequirements(driveTrain);
-    addRequirements(navx);
+   
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      angle = navx.ahrs.getAngle();
+      angle = NavXGyro.ahrs.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +35,7 @@ public class TankDriveStraight extends CommandBase {
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
     if(Math.abs(leftY)>Constants.min_joystick_correction_threshold && Math.abs(rightY)>Constants.min_joystick_correction_threshold){
-        if(navx.ahrs.getAngle() < angle){
+        if(NavXGyro.ahrs.getAngle() < angle){
             //turn left
             driveTrain.setLeftMotor(driveTrain.currentLeft*Constants.angle_correction_multiplier);
             driveTrain.setRightMotor(driveTrain.currentRight/Constants.angle_correction_multiplier);

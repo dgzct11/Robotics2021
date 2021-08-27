@@ -9,10 +9,10 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class NavXGyro extends SubsystemBase {
-  public AHRS ahrs  = new AHRS(Constants.mxp_port);
+  public static AHRS ahrs;
   /** Creates a new NavXGyro. */
   public NavXGyro() {
-    
+    ahrs = new AHRS(Constants.mxp_port);
   }
 
   @Override

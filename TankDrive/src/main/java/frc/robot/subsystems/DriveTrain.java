@@ -18,8 +18,8 @@ public class DriveTrain extends SubsystemBase {
   public double currentRight = 0;
   
   /** Creates a new DriveTrain. */
-  public DriveTrain(XboxController x) {
-    xbox = x;
+  public DriveTrain() {
+    
   }
 
   public void setRightMotor(double speed){
