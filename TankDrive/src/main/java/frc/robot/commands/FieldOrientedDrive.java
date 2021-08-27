@@ -4,25 +4,21 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 
-public class TurnAngle extends CommandBase {
+public class FieldOrientedDrive extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
-  private final double angle;
-  private XboxController xbox;
+  
   /** Creates a new TankDrive. */
-  public TurnAngle(DriveTrain dt, NavXGyro n, double a, XboxController x) {
+  public FieldOrientedDrive(DriveTrain dt, NavXGyro n) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     navx = n;
-    angle = a;
-    xbox = x;
     addRequirements(driveTrain);
     addRequirements(navx);
   }
@@ -30,35 +26,44 @@ public class TurnAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(Constants.turned) this.end(true);
+      
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(xbox.getAButtonPressed()){
-    if(navx.ahrs.getAngle()>angle){
-        //turn right
-        driveTrain.spin(-1*Constants.spin_rate);
+    double rightX = RobotContainer.xbox_controller.getRawAxis(Constants.right_x_axis);
+    double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
+    
+    double angle = Math.arctan(rightY/rightX);
+    if (rightX<0) angle -= 180;
+    speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
+    if(NavXGyro.navx.getAngle()<angle-Constants.angle_err){
+      //turn right
+      driveTrain.spin(-speed);
+      
+    }
+    else if(NavXGyro.navx.getAngle()>angle+Constants.angle_err){
+      //turn left
+      driveTrain.spin(speed);
     }
     else{
-        //turn left
-        driveTrain.spin(Constants.spin_rate);
+      //go straight
+      driveTrain.setLeftMotor(speed);
+      driveTrain.setRightMotor(speed);
     }
-  }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.setLeftMotor(0);
-    driveTrain.setRightMotor(0);
     
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return navx.ahrs.getAngle() <= angle + Constants.angle_error && navx.ahrs.getAngle() >= angle - Constants.angle_error;
+    return false;
   }
 }

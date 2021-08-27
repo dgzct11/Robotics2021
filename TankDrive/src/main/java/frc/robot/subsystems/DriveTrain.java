@@ -16,9 +16,10 @@ public class DriveTrain extends SubsystemBase {
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
   public double currentLeft = 0;
   public double currentRight = 0;
+  
   /** Creates a new DriveTrain. */
-  public DriveTrain() {
-    
+  public DriveTrain(XboxController x) {
+    xbox = x;
   }
 
   public void setRightMotor(double speed){
@@ -41,13 +42,14 @@ public class DriveTrain extends SubsystemBase {
   public void spin(double speed){
     //pos speed is left
     //neg speed is right
-    rightSpeedC.set(ControlMode.PercentOutput, speed);
+    rightSpeedC.set(ControlMode.PercentOutput, speed*Constants.max_motor_percent);
     currentLeft = speed;
     currentRight = speed;
-    leftSpeedC.set(ControlMode.PercentOutput, speed);
+    leftSpeedC.set(ControlMode.PercentOutput, speed*Constants.max_motor_percent);
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 }
