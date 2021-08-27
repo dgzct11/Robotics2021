@@ -11,7 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 
 import edu.wpi.first.wpilibj.XboxController;
-
+import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 
 import frc.robot.commands.SwitchDriveMode;
@@ -51,6 +51,10 @@ public class RobotContainer {
   Button aButtonTurn90Left = new JoystickButton(xbox_controller, Constants.a_button_num);
   Button bButtonTurn90Right = new JoystickButton(xbox_controller, Constants.b_button_num);
   Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
+  Button yButtonGo0 = new JoystickButton(xbox_controller, Constants.y_button_num);
+  Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
+  Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -89,6 +93,9 @@ public class RobotContainer {
     aButtonTurn90Left.whenPressed(new TurnAngle(driveTrain, 90));
     bButtonTurn90Right.whenPressed(new TurnAngle(driveTrain,  -90));
     xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
+    yButtonGo0.whenPressed(new TurnAngle(driveTrain,0));
+    rightButtonIncMotor.whenPressed(new ChangeMaxSpeed(0.1));
+    leftButtonDecMotor.whenPressed(new ChangeMaxSpeed(-0.1));
   }
 
   /**

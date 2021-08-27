@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -35,23 +36,39 @@ public class FieldOrientedDrive extends CommandBase {
     double rightX = RobotContainer.xbox_controller.getRawAxis(Constants.right_x_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
     
-    double angle = Math.atan(rightY/rightX);
-    if (rightX<0) angle -= 180;
+    double angle = Constants.stickTo360(rightX, rightY);
+    SmartDashboard.putNumber("Field Oriented Angle", angle);
+    SmartDashboard.putNumber("Navx Angle", Constants.navxTo360( NavXGyro.ahrs.getYaw()));
     double speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
-    if(NavXGyro.ahrs.getAngle()<angle-Constants.angle_error){
+   /*
+    if(NavXGyro.ahrs.getYaw()<angle-Constants.angle_error){
       //turn right
-      driveTrain.spin(-speed);
+      driveTrain.spin(speed);
       
     }
-    else if(NavXGyro.ahrs.getAngle()>angle+Constants.angle_error){
+    else if(NavXGyro.ahrs.getYaw()>angle+Constants.angle_error){
       //turn left
-      driveTrain.spin(speed);
+      driveTrain.spin(-speed);
     }
     else{
       //go straight
       driveTrain.setLeftMotor(speed);
       driveTrain.setRightMotor(speed);
     }
+*/
+      double angle_corrector = Math.max(1.05, 1+Math.abs(angle-Constants.navxTo360(NavXGyro.ahrs.getYaw())) );
+      speed*=Constants.max_motor_percent;
+      if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
+          //turn left
+          driveTrain.setLeftMotor(speed/angle_corrector);
+          driveTrain.setRightMotor(speed);
+      }
+      else{
+          //turn right
+          driveTrain.setLeftMotor(speed);
+          driveTrain.setRightMotor(speed/angle_corrector);
+      }
+      
 
   }
 

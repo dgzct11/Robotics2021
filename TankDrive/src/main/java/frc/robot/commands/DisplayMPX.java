@@ -31,7 +31,7 @@ public class DisplayMPX extends CommandBase {
   public void execute() {
     SmartDashboard.putBoolean(  "IMU_Connected",        ahrs.isConnected());
     SmartDashboard.putBoolean(  "IMU_IsCalibrating",    ahrs.isCalibrating());
-    SmartDashboard.putNumber(   "IMU_Yaw",              ahrs.getYaw());
+    SmartDashboard.putNumber(   "IMU_Yaw",              Constants.navxTo360(ahrs.getYaw()));
     SmartDashboard.putNumber(   "IMU_Pitch",            ahrs.getPitch());
     SmartDashboard.putNumber(   "IMU_Roll",             ahrs.getRoll());
     
@@ -106,6 +106,8 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber(   "IMU_Byte_Count",       ahrs.getByteCount());
     SmartDashboard.putNumber(   "IMU_Update_Count",     ahrs.getUpdateCount());
     SmartDashboard.putNumber("Drive Mode", Constants.driveMode);
+    SmartDashboard.putNumber("Max Motor Percent", Constants.max_motor_percent);
+    SmartDashboard.putNumber("Compass Direction", ahrs.getYaw()>0 ? ahrs.getYaw():ahrs.getYaw()+360);
   }
 
   // Called once the command ends or is interrupted.

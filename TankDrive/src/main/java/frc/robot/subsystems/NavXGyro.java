@@ -15,6 +15,7 @@ public class NavXGyro extends SubsystemBase {
     ahrs = new AHRS(Constants.mxp_port);
   }
 
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

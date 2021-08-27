@@ -31,11 +31,12 @@ public class SwitchDriveMode extends CommandBase {
 
     }
     else if (Constants.driveMode == 1){
-      driveTrain.setDefaultCommand(new TankDrive(driveTrain));
+      
+      driveTrain.setDefaultCommand(new FieldOrientedDrive(driveTrain, navx));
       Constants.driveMode = 2;
     }
     else if (Constants.driveMode ==2){
-      driveTrain.setDefaultCommand(new FieldOrientedDrive(driveTrain, navx));
+      driveTrain.setDefaultCommand(new TankDrive(driveTrain));
       Constants.driveMode = 0;
     }
   }
