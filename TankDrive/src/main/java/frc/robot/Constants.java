@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.SPI.Port;
+import frc.robot.subsystems.NavXGyro;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -57,5 +58,9 @@ public final class Constants {
         if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
         else value = angle<targetAngle && angle> targetAngle-180;
         return value;
+    }
+    public static boolean currentAngleEquals(double angle){
+        double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
+        return shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error);
     }
 }
