@@ -8,20 +8,22 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
-
+//import org.graalvm.compiler.nodes.ConstantNode;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
-import frc.robot.commands.DriveToPoint;
+
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
+//import jdk.vm.ci.meta.Constant;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
@@ -48,10 +50,17 @@ public class RobotContainer {
 
 
   //Buttons
-  Button aButtonTurn90Left = new JoystickButton(xbox_controller, Constants.a_button_num);
+  /*Button aButtonTurn90Left = new JoystickButton(xbox_controller, Constants.a_button_num);
   Button bButtonTurn90Right = new JoystickButton(xbox_controller, Constants.b_button_num);
   Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
-  Button yButtonGo0 = new JoystickButton(xbox_controller, Constants.y_button_num);
+  Button yButtonGo0 = new JoystickButton(xbox_controller, Constants.y_button_num);*/
+  Button leftPad = new POVButton(xbox_controller, Constants.left_pad_num);
+  Button rightPad = new POVButton(xbox_controller, Constants.right_pad_num);
+  Button upPad = new POVButton(xbox_controller, Constants.up_pad_num);
+  Button downPad = new POVButton(xbox_controller, Constants.down_pad_num);
+
+  Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
+
   Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
   Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
   
@@ -90,10 +99,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    aButtonTurn90Left.whenPressed(new TurnAngle(driveTrain, 90));
-    bButtonTurn90Right.whenPressed(new TurnAngle(driveTrain,  -90));
+    leftPad.whenPressed(new TurnAngle(driveTrain, -90));
+    rightPad.whenPressed(new TurnAngle(driveTrain,  90));
+    upPad.whenPressed(new TurnAngle(driveTrain, 0));
+    downPad.whenPressed(new TurnAngle(driveTrain, 180));
     xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
-    yButtonGo0.whenPressed(new TurnAngle(driveTrain,0));
     rightButtonIncMotor.whenPressed(new ChangeMaxSpeed(0.1));
     leftButtonDecMotor.whenPressed(new ChangeMaxSpeed(-0.1));
   }
@@ -105,6 +115,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new DriveToPoint(3, 5, driveTrain);
+    return null;
   }
 }
