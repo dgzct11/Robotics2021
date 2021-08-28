@@ -35,10 +35,10 @@ public final class Constants {
     public static final int y_button_num = 4;
 
     //placeholder ports
-    public static final int left_pad_num = 0;
-    public static final int right_pad_num = 0;
+    public static final int left_pad_num = 270;
+    public static final int right_pad_num = 90;
     public static final int up_pad_num = 0;
-    public static final int down_pad_num = 0;
+    public static final int down_pad_num = 180;
 
     public static final int lb_button_num = 5;
     public static final int rb_button_num = 6;
