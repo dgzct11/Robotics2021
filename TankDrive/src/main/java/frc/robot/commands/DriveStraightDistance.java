@@ -10,37 +10,32 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 
-public class TankDriveStraight extends CommandBase {
-  private final DriveTrain driveTrain;
-  
-  private double angle;
-  /** Creates a new TankDrive. */
-  public TankDriveStraight(DriveTrain dt) {
+public class DriveStraightDistance extends CommandBase {
+  /** Creates a new DriveStraightDistance. */
+  double distance;
+  double angle;
+  DriveTrain driveTrain;
+  public DriveStraightDistance(double d, double a, DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
+    distance = d;
     driveTrain = dt;
-   
-    addRequirements(driveTrain);
-   
+    angle = a;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      angle = NavXGyro.ahrs.getAngle();
+    NavXGyro.ahrs.resetDisplacement();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
-    double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
-    if(Math.abs(leftY)>Constants.min_joystick_correction_threshold && Math.abs(rightY)>Constants.min_joystick_correction_threshold){
-      double speed = Constants.max_motor_percent*(leftY > 0 ? 1:-1);
-      if(!Constants.angle_fixed){
-        angle=NavXGyro.ahrs.getYaw(); 
-        Constants.angle_fixed = true;
-      }
-      if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
+    
+    
+      double speed = Constants.max_motor_percent;
+      
+      
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
             driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
@@ -51,25 +46,21 @@ public class TankDriveStraight extends CommandBase {
             driveTrain.setLeftMotor(speed*Constants.angle_correction_multiplier);
             driveTrain.setRightMotor(speed/Constants.angle_correction_multiplier);
         }
-        if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
-     
-    }
-    else{
-        driveTrain.setRightMotor(rightY);
-        driveTrain.setLeftMotor(leftY);
-        Constants.angle_fixed = false;
-    }
+        
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    driveTrain.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean value = NavXGyro.ahrs.getDisplacementX() <= distance + Constants.distance_error && NavXGyro.ahrs.getDisplacementX()>= distance - Constants.distance_error;
+    this.end(value);
+    return value;
   }
 }

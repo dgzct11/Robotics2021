@@ -35,6 +35,7 @@ public final class Constants {
     public static final int y_button_num = 4;
     public static final int lb_button_num = 5;
     public static final int rb_button_num = 6;
+    public static final double distance_error = 0;
     public static int driveMode = 0; //0 = tank, 1 = tankstraight
     public static boolean angle_fixed = false;
     
