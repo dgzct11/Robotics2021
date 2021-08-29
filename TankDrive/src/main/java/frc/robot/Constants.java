@@ -71,6 +71,10 @@ public final class Constants {
         return shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error);
     }
     public static double angleDistance(double targetAngle){
-        return null;
+        if(targetAngle>180) targetAngle = -1*(360 - targetAngle);
+        double currentAngle = -1*(360-navxTo360(NavXGyro.ahrs.getYaw()));
+        double distance = Math.abs(currentAngle - targetAngle);
+        if (distance > 180) distance = 360 - distance;
+        return distance;
     }
 }
