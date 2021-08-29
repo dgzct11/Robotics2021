@@ -70,4 +70,7 @@ public final class Constants {
         double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
         return shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error);
     }
+    public static double angleDistance(double targetAngle){
+        return null;
+    }
 }

@@ -12,7 +12,12 @@ import frc.robot.subsystems.NavXGyro;
 
 public class TankDriveStraight extends CommandBase {
   private final DriveTrain driveTrain;
-  
+  double kp = 1;
+  double ki = 0;
+  double kd = 0;
+  double kf = 0;
+  double previous_error = 0;
+  double error = 0;
   private double angle;
   /** Creates a new TankDrive. */
   public TankDriveStraight(DriveTrain dt) {
@@ -34,6 +39,7 @@ public class TankDriveStraight extends CommandBase {
   public void execute() {
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
+
     if(Math.abs(leftY)>Constants.min_joystick_correction_threshold && Math.abs(rightY)>Constants.min_joystick_correction_threshold){
       double speed = Constants.max_motor_percent*(leftY > 0 ? 1:-1);
       if(!Constants.angle_fixed){
