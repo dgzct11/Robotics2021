@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 
@@ -15,6 +15,13 @@ public class DriveStraightDistance extends CommandBase {
   double distance;
   double angle;
   DriveTrain driveTrain;
+  double kp = 1;
+  double ki = 0;
+  double kd = 0;
+  double kf = 0;
+  double time = 0;
+  double previous_error = 0;
+  double error = 0;
   public DriveStraightDistance(double d, double a, DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
     distance = d;
@@ -35,7 +42,8 @@ public class DriveStraightDistance extends CommandBase {
     
       double speed = Constants.max_motor_percent;
       
-      
+      error = Constants.angleDistance(angle);
+      Constants.angle_correction_multiplier = kp*error + ki*error*time + kd*(error-previous_error)/time;
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
             driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
@@ -46,7 +54,7 @@ public class DriveStraightDistance extends CommandBase {
             driveTrain.setLeftMotor(speed*Constants.angle_correction_multiplier);
             driveTrain.setRightMotor(speed/Constants.angle_correction_multiplier);
         }
-        
+        previous_error = error;
     
   }
 

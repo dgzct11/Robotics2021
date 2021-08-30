@@ -13,7 +13,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
-
+import frc.robot.commands.FollowPath;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
@@ -115,6 +115,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    int[][] points = {{1,1},{1,3}, {3,3}, {3,0}, {0,0}};
+    return new FollowPath(points, driveTrain);
   }
 }

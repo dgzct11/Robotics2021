@@ -14,7 +14,13 @@ import frc.robot.subsystems.NavXGyro;
 public class FieldOrientedDrive extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
-  
+  double kp = 1;
+  double ki = 0;
+  double kd = 0;
+  double kf = 0;
+  double time = 0;
+  double previous_error = 0;
+  double error = 0;
   /** Creates a new TankDrive. */
   public FieldOrientedDrive(DriveTrain dt, NavXGyro n) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -55,8 +61,8 @@ public class FieldOrientedDrive extends CommandBase {
       driveTrain.setLeftMotor(speed);
       driveTrain.setRightMotor(speed);
     }
-*/
-      double angle_corrector = Math.max(1.05, 1+Math.abs(angle-Constants.navxTo360(NavXGyro.ahrs.getYaw())) );
+*/    error = Constants.angleDistance(angle);
+      double angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
       speed*=Constants.max_motor_percent;
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
           //turn left
@@ -68,7 +74,7 @@ public class FieldOrientedDrive extends CommandBase {
           driveTrain.setLeftMotor(speed);
           driveTrain.setRightMotor(speed/angle_corrector);
       }
-      
+      previous_error = error;
 
   }
 
