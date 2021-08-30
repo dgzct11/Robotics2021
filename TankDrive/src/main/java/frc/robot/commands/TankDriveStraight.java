@@ -16,6 +16,7 @@ public class TankDriveStraight extends CommandBase {
   double ki = 0;
   double kd = 0;
   double kf = 0;
+  double time = 0;
   double previous_error = 0;
   double error = 0;
   private double angle;
@@ -39,13 +40,16 @@ public class TankDriveStraight extends CommandBase {
   public void execute() {
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
-
+    
     if(Math.abs(leftY)>Constants.min_joystick_correction_threshold && Math.abs(rightY)>Constants.min_joystick_correction_threshold){
       double speed = Constants.max_motor_percent*(leftY > 0 ? 1:-1);
+      
       if(!Constants.angle_fixed){
         angle=NavXGyro.ahrs.getYaw(); 
         Constants.angle_fixed = true;
       }
+      error = Constants.angleDistance(angle);
+      Constants.angle_correction_multiplier = kp*error + ki*error*time + kd*(error-previous_error)/time;
       if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
@@ -58,7 +62,7 @@ public class TankDriveStraight extends CommandBase {
             driveTrain.setRightMotor(speed/Constants.angle_correction_multiplier);
         }
         if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
-     
+        previous_error = error;
     }
     else{
         driveTrain.setRightMotor(rightY);
