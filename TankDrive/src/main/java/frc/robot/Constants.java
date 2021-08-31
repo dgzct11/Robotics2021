@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import frc.robot.subsystems.NavXGyro;
@@ -47,18 +48,23 @@ public final class Constants {
     public static final double distance_error = 0;
     public static int driveMode = 0; //0 = tank, 1 = tankstraight
     public static boolean angle_fixed = false;
+	public static double kvVoltSecondsPerMeter;
     
 
     public static final double ksVolts = 0.22;
     public static final double kvVoltSecondPerMeter = 1.98;
     public static final double kaVoltSecondsSquaredPerMeter = 0.2;
-    public static final double dPDriveVel = 8.5;
+    public static final double kPDriveVel = 8.5;
     public static final double kTrackwidthMeters = 3;
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+    public static final DigitalSource kLeftEncoderPort = null;
+	public static final DigitalSource kLeftEncoderReversed = null;
+	public static final DigitalSource kRightEncoderPort = null;
+	public static final DigitalSource kRightEncoderReversed = null;
     public static double navxTo360(double angle){
         if(angle<=0) angle = Math.abs(angle);
         else angle = (180-angle) + 180;

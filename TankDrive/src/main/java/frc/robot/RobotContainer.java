@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 //import org.graalvm.compiler.nodes.ConstantNode;
 
@@ -175,7 +175,7 @@ public class RobotContainer {
             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
             new SimpleMotorFeedforward(
                 Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
+                Constants.kvVoltSecondPerMeter,
                 Constants.kaVoltSecondsSquaredPerMeter),
            Constants.kDriveKinematics,
             driveTrain::getWheelSpeeds,
@@ -186,7 +186,7 @@ public class RobotContainer {
             driveTrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
+   //driveTrain.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));

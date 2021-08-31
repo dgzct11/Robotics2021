@@ -8,8 +8,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,7 +20,13 @@ public class DriveTrain extends SubsystemBase {
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
   public double currentLeft = 0;
   public double currentRight = 0;
-  
+  private final Encoder m_leftEncoder =
+      new Encoder(Constants.kLeftEncoderPort,
+                  Constants.kLeftEncoderReversed);
+
+  // The right-side drive encoder
+  private final Encoder m_rightEncoder =
+      new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     
@@ -56,8 +64,8 @@ public class DriveTrain extends SubsystemBase {
   public void tankDriveVolts(double vl, double vr){
 
   }
-  public void getWheelSpeeds(){
-    
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
   }
   @Override
   public void periodic() {
