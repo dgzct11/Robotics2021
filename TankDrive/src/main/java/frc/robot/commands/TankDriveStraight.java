@@ -12,11 +12,11 @@ import frc.robot.subsystems.NavXGyro;
 
 public class TankDriveStraight extends CommandBase {
   private final DriveTrain driveTrain;
-  double kp = 1;
+  double kp = 0.01;
   double ki = 0;
   double kd = 0;
   double kf = 0;
-  double time = 0;
+  double time = 0.02;
   double previous_error = 0;
   double error = 0;
   private double angle;
@@ -32,7 +32,7 @@ public class TankDriveStraight extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      angle = NavXGyro.ahrs.getAngle();
+      angle = NavXGyro.ahrs.getYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,7 +49,7 @@ public class TankDriveStraight extends CommandBase {
         Constants.angle_fixed = true;
       }
       error = Constants.angleDistance(angle);
-      Constants.angle_correction_multiplier = kp*error + ki*error*time + kd*(error-previous_error)/time;
+      Constants.angle_correction_multiplier = 1+ kp*error + ki*error*time + kd*(error-previous_error)/time;
       if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
@@ -68,6 +68,7 @@ public class TankDriveStraight extends CommandBase {
         driveTrain.setRightMotor(rightY);
         driveTrain.setLeftMotor(leftY);
         Constants.angle_fixed = false;
+        
     }
   }
 

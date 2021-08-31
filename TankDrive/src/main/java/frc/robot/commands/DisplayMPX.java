@@ -108,6 +108,11 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber("Drive Mode", Constants.driveMode);
     SmartDashboard.putNumber("Max Motor Percent", Constants.max_motor_percent);
     SmartDashboard.putNumber("Compass Direction", ahrs.getYaw()>0 ? ahrs.getYaw():ahrs.getYaw()+360);
+    SmartDashboard.putBoolean("equals 0", Constants.currentAngleEquals(0));
+    SmartDashboard.putBoolean("equals 90", Constants.currentAngleEquals(90));
+    SmartDashboard.putBoolean("equals 180", Constants.currentAngleEquals(180));
+    SmartDashboard.putBoolean("equals 270", Constants.currentAngleEquals(270));
+    SmartDashboard.putBoolean("Should turn Left to 0", Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), 0));
   }
 
   // Called once the command ends or is interrupted.

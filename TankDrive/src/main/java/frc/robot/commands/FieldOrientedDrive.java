@@ -14,11 +14,11 @@ import frc.robot.subsystems.NavXGyro;
 public class FieldOrientedDrive extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
-  double kp = 1;
+  double kp = 0.02;
   double ki = 0;
-  double kd = 0;
+  double kd = 0.000;
   double kf = 0;
-  double time = 0;
+  double time = 0.02;
   double previous_error = 0;
   double error = 0;
   /** Creates a new TankDrive. */

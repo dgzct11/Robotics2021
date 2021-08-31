@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.NavXGyro;
 ;
 
@@ -60,7 +61,7 @@ public class FollowContPath extends CommandBase {
       Trajectory.State goal = trajectory.sample(time);
       Pose2d currentRobotPose = new Pose2d(NavXGyro.ahrs.getDisplacementX(), NavXGyro.ahrs.getDisplacementY(), Rotation2d.fromDegrees(NavXGyro.ahrs.getAngle()));
       ChassisSpeeds adjustedSpeeds = controller.calculate(currentRobotPose, goal);
-      DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(adjustedSpeeds);
+      DifferentialDriveWheelSpeeds wheelSpeeds = Constants.kDriveKinematics.toWheelSpeeds(adjustedSpeeds);
     } else {
       initialTime = System.currentTimeMillis();
       

@@ -113,8 +113,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    leftPad.whenPressed(new TurnAngle(driveTrain, -90));
-    rightPad.whenPressed(new TurnAngle(driveTrain,  90));
+    leftPad.whenPressed(new TurnAngle(driveTrain, 90));
+    rightPad.whenPressed(new TurnAngle(driveTrain,  270));
     upPad.whenPressed(new TurnAngle(driveTrain, 0));
     downPad.whenPressed(new TurnAngle(driveTrain, 180));
     xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
@@ -132,7 +132,7 @@ public class RobotContainer {
     return null;
   }
 
-
+/*
   public Command getPathFollowCommand(){
    
 
@@ -192,4 +192,5 @@ public class RobotContainer {
     return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
 
   }
+  */
 }

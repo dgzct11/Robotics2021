@@ -20,13 +20,13 @@ public class DriveTrain extends SubsystemBase {
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
   public double currentLeft = 0;
   public double currentRight = 0;
-  private final Encoder m_leftEncoder =
+  /*private final Encoder m_leftEncoder =
       new Encoder(Constants.kLeftEncoderPort,
-                  Constants.kLeftEncoderReversed);
+                  Constants.kLeftEncoderReversed);*/
 
   // The right-side drive encoder
-  private final Encoder m_rightEncoder =
-      new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);
+  /*private final Encoder m_rightEncoder =
+      new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);*/
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     
@@ -64,9 +64,9 @@ public class DriveTrain extends SubsystemBase {
   public void tankDriveVolts(double vl, double vr){
 
   }
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+  /*public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
-  }
+  }*/
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

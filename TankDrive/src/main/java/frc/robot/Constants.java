@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.NavXGyro;
 
 /**
@@ -80,13 +81,15 @@ public final class Constants {
     public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
         double angle = navxTo360(currentNavxAngle);
         boolean value = false;
+
         if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
         else value = angle<targetAngle && angle> targetAngle-180;
+        SmartDashboard.putBoolean("Should Turn Left", value);
         return value;
     }
     public static boolean currentAngleEquals(double angle){
         double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
-        return shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error);
+        return ( shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error) ) && !(shouldTurnLeft((currentAngle+90)%360,angle));
     }
     public static double angleDistance(double targetAngle){
         if(targetAngle>180) targetAngle = -1*(360 - targetAngle);
