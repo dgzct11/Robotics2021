@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -48,6 +49,15 @@ public class DriveTrain extends SubsystemBase {
     currentLeft = speed;
     currentRight = speed;
     leftSpeedC.set(ControlMode.PercentOutput, speed*Constants.max_motor_percent);
+  }
+  public Pose2d getPose(){
+    return new Pose2d(NavXGyro.ahrs.getDisplacementX(), NavXGyro.ahrs.getDisplacementY(), Rotation2d.fromDegrees(NavXGyro.ahrs.getYaw()));
+  }
+  public void tankDriveVolts(double vl, double vr){
+
+  }
+  public void getWheelSpeeds(){
+    
   }
   @Override
   public void periodic() {

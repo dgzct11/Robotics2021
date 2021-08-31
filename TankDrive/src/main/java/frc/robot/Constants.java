@@ -55,7 +55,7 @@ public final class Constants {
     public static final double dPDriveVel = 8.5;
     public static final double kTrackwidthMeters = 3;
     public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecodnSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
