@@ -67,16 +67,23 @@ public final class Constants {
 	public static final DigitalSource kRightEncoderPort = null;
 	public static final DigitalSource kRightEncoderReversed = null;
     public static double navxTo360(double angle){
-        if(angle<=0) angle = Math.abs(angle);
-        else angle = (180-angle) + 180;
+        angle = -angle;
+        if (angle<=0) angle += 360;
+
         return angle;
     }
+    public static double to360(double angle) {
+        if (angle <= 0) angle += 360;
+
+        return Math.abs(angle%360);
+    }
     public static double stickTo360(double x, double y){
-        double angle = Math.toDegrees(Math.atan(y/x))+90;
-    
-        if (x<0) angle -= 180;
-        
-        return navxTo360(angle);
+        double angle = Math.toDegrees(Math.atan(-x/y));
+
+        if(x<0 && y<0) return Math.abs(to360(angle)-180);
+        if(x>0 && y<0) return to360(angle) + 180;
+        if (x==0 && y<0) angle = 180;
+        return to360(angle);
     }
     public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
         double angle = navxTo360(currentNavxAngle);
@@ -84,7 +91,6 @@ public final class Constants {
 
         if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
         else value = angle<targetAngle && angle> targetAngle-180;
-        SmartDashboard.putBoolean("Should Turn Left", value);
         return value;
     }
     public static boolean currentAngleEquals(double angle){
@@ -92,9 +98,8 @@ public final class Constants {
         return ( shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error) ) && !(shouldTurnLeft((currentAngle+90)%360,angle));
     }
     public static double angleDistance(double targetAngle){
-        if(targetAngle>180) targetAngle = -1*(360 - targetAngle);
-        double currentAngle = -1*(360-navxTo360(NavXGyro.ahrs.getYaw()));
-        double distance = Math.abs(currentAngle - targetAngle);
+        double angle = navxTo360(NavXGyro.ahrs.getYaw());
+        double distance = Math.abs(targetAngle - angle)%360;
         if (distance > 180) distance = 360 - distance;
         return distance;
     }
