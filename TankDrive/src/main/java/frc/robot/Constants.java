@@ -24,7 +24,7 @@ public final class Constants {
     public static final int right_motor_port = 4;
     
     public static final int left_y_axis = 1;
-    public static final int left_x_axis = 2;
+    public static final int left_x_axis = 0;
     public static final int right_y_axis = 5;
     public static final int right_x_axis = 4;
     public static final int left_motor_port = 0;
@@ -68,7 +68,7 @@ public final class Constants {
 	public static final DigitalSource kRightEncoderPort = null;
 	public static final DigitalSource kRightEncoderReversed = null;
     public static double navxTo360(double angle){
-        angle = -angle;
+        
         if (angle<=0) angle += 360;
 
         return angle;
@@ -79,12 +79,7 @@ public final class Constants {
         return Math.abs(angle%360);
     }
     public static double stickTo360(double x, double y){
-        double angle = Math.toDegrees(Math.atan(-x/y));
-
-        if(x<0 && y<0) return Math.abs(to360(angle)-180);
-        if(x>0 && y<0) return to360(angle) + 180;
-        if (x==0 && y<0) angle = 180;
-        return to360(angle);
+       return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
     }
     public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
         double angle = navxTo360(currentNavxAngle);

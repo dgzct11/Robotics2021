@@ -16,11 +16,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
+  
   TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
+  //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;
   public double currentRight = 0;
-  /*private final Encoder m_leftEncoder =
+  //leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
+  /*private final Encoder m_leftEncoder 
       new Encoder(Constants.kLeftEncoderPort,
                   Constants.kLeftEncoderReversed);*/
 
