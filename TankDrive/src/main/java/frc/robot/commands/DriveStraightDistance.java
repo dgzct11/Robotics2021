@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
@@ -15,13 +16,14 @@ public class DriveStraightDistance extends CommandBase {
   double distance;
   double angle;
   DriveTrain driveTrain;
-  double kp = 1;
+  double kp = 0.05;
   double ki = 0;
   double kd = 0;
   double kf = 0;
   double time = 0;
   double previous_error = 0;
   double error = 0;
+  double value = 0;
   public DriveStraightDistance(double d, double a, DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
     distance = d;
@@ -38,20 +40,24 @@ public class DriveStraightDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putString("going", "now");
+    SmartDashboard.putNumber("Value", value);
+    
+    
     
     
       double speed = Constants.max_motor_percent;
       
       error = Constants.angleDistance(angle);
-      Constants.angle_correction_multiplier = kp*error + ki*error*time + kd*(error-previous_error)/time;
+      Constants.angle_correction_multiplier = Math.max(1, kp*error + ki*error*time + kd*(error-previous_error)/time);
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
             driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
-            driveTrain.setRightMotor(speed*Constants.angle_correction_multiplier);
+            driveTrain.setRightMotor(speed);
         }
         else{
             //turn right
-            driveTrain.setLeftMotor(speed*Constants.angle_correction_multiplier);
+            driveTrain.setLeftMotor(speed);
             driveTrain.setRightMotor(speed/Constants.angle_correction_multiplier);
         }
         previous_error = error;
@@ -62,13 +68,14 @@ public class DriveStraightDistance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveTrain.stop();
+    SmartDashboard.putString("going", "done");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     boolean value = NavXGyro.ahrs.getDisplacementX() <= distance + Constants.distance_error && NavXGyro.ahrs.getDisplacementX()>= distance - Constants.distance_error;
-    this.end(value);
+    
     return value;
   }
 }

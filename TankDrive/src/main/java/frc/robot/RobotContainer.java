@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
-
+import frc.robot.commands.DriveStraightDistance;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
@@ -77,7 +77,7 @@ public class RobotContainer {
 
   Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
   Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
-  
+  DriveStraightDistance driveStraightDistance;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -98,7 +98,7 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(tankDrive);
     navx.setDefaultCommand(displayMPX);
     configureButtonBindings();
-    
+    driveStraightDistance = new DriveStraightDistance(0.5, 0, driveTrain);
     
     
     
@@ -129,7 +129,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return driveStraightDistance;
   }
 
 /*

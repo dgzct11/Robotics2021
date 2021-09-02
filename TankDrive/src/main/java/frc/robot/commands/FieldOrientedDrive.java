@@ -14,7 +14,7 @@ import frc.robot.subsystems.NavXGyro;
 public class FieldOrientedDrive extends CommandBase {
   private final DriveTrain driveTrain;
   private final NavXGyro navx;
-  double kp = 0.02;
+  double kp = 0.5;
   double ki = 0;
   double kd = 0.000;
   double kf = 0;
@@ -47,11 +47,11 @@ public class FieldOrientedDrive extends CommandBase {
     double angle = Constants.stickTo360(rightX, rightY);
     SmartDashboard.putNumber("Field Oriented Angle", angle);
     SmartDashboard.putNumber("Navx Angle", Constants.navxTo360( NavXGyro.ahrs.getYaw()));
-    double speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
+     double speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
     
     error = Constants.angleDistance(angle);
       double angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
-      speed*=Constants.max_motor_percent;
+      speed*=-Constants.max_motor_percent;
       if (leftX != 0) {
         driveTrain.spin(leftX);
         return;
@@ -59,16 +59,22 @@ public class FieldOrientedDrive extends CommandBase {
       SmartDashboard.putNumber("Angle Distance", Constants.angleDistance(angle));
       SmartDashboard.putBoolean("Should go Back",Constants.angleDistance(angle) > 90 );
       if (Constants.angleDistance(angle) > 90) {
+        error = Constants.angleDistance( (angle - 180 + 360)%360);
+        angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
+        
         speed *= -1;
+        SmartDashboard.putBoolean("Should Turn Left",Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360) );
+        SmartDashboard.putNumber("Speed", speed);
+   
         if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360)){
           //turn left
-          driveTrain.setLeftMotor(speed/angle_corrector);
-          driveTrain.setRightMotor(speed);
+          driveTrain.setLeftMotor(speed);
+          driveTrain.setRightMotor(speed/angle_corrector);
         }
         else{
           //turn right
-          driveTrain.setLeftMotor(speed);
-          driveTrain.setRightMotor(speed/angle_corrector);
+          driveTrain.setLeftMotor(speed/angle_corrector);
+          driveTrain.setRightMotor(speed);
         }
       }
       else {

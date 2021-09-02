@@ -47,7 +47,7 @@ public final class Constants {
 
     public static final int lb_button_num = 5;
     public static final int rb_button_num = 6;
-    public static final double distance_error = 0;
+    public static final double distance_error = 0.01;
     public static int driveMode = 0; //0 = tank, 1 = tankstraight
     public static boolean angle_fixed = false;
 	public static double kvVoltSecondsPerMeter;
@@ -71,7 +71,7 @@ public final class Constants {
         
         if (angle<=0) angle += 360;
 
-        return angle;
+        return 360-angle;
     }
     public static double to360(double angle) {
         if (angle <= 0) angle += 360;
