@@ -24,6 +24,7 @@ public final class Constants {
     public static final int right_motor_port = 4;
     
     public static final int left_y_axis = 1;
+    public static final int left_x_axis = 2;
     public static final int right_y_axis = 5;
     public static final int right_x_axis = 4;
     public static final int left_motor_port = 0;

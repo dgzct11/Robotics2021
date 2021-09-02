@@ -41,6 +41,8 @@ public class FieldOrientedDrive extends CommandBase {
   public void execute() {
     double rightX = RobotContainer.xbox_controller.getRawAxis(Constants.right_x_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
+    double leftX = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
+    double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_x_axis);
     
     double angle = Constants.stickTo360(rightX, rightY);
     SmartDashboard.putNumber("Field Oriented Angle", angle);
@@ -64,6 +66,9 @@ public class FieldOrientedDrive extends CommandBase {
 */    error = Constants.angleDistance(angle);
       double angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
       speed*=Constants.max_motor_percent;
+      if (rightY < 0) {
+        speed *= -1;
+      }
       if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
           //turn left
           driveTrain.setLeftMotor(speed/angle_corrector);
