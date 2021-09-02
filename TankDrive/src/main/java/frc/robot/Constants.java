@@ -29,7 +29,7 @@ public final class Constants {
     public static final int left_motor_port = 0;
     public static  double max_motor_percent = 0.3;
     public static final Port mxp_port = Port.kMXP;
-    public static final double angle_error = 0.6;
+    public static final double angle_error = 0.1;
     public static final double spin_rate = 0.2;
     public static double angle_correction_multiplier = 1.1;
     public static final double min_joystick_correction_threshold = 0.6;

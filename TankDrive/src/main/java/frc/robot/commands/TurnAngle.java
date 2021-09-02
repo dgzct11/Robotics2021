@@ -16,9 +16,9 @@ public class TurnAngle extends CommandBase {
   private final DriveTrain driveTrain;
   
   private final double angle;
-  double kp = 0.05;
+  double kp = 0.04;
   double ki = 0.0;
-  double kd = 0.00;
+  double kd = 0.0001;
   double kf = 0.00;
   double kTolerance = 2.0;
   double previous_error = 0;
