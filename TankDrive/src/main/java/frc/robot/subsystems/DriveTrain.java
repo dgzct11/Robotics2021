@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -22,7 +23,7 @@ public class DriveTrain extends SubsystemBase {
   //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;
   public double currentRight = 0;
-  leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
+  
   /*private final Encoder m_leftEncoder 
       new Encoder(Constants.kLeftEncoderPort,
                   Constants.kLeftEncoderReversed);*/
@@ -32,7 +33,9 @@ public class DriveTrain extends SubsystemBase {
       new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);*/
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
+    leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
+    rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
+    leftSpeedC.set(ControlMode.MotionMagic, demand);
   }
 
   public void setRightMotor(double speed){

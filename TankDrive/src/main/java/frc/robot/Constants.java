@@ -67,6 +67,7 @@ public final class Constants {
 	public static final DigitalSource kLeftEncoderReversed = null;
 	public static final DigitalSource kRightEncoderPort = null;
 	public static final DigitalSource kRightEncoderReversed = null;
+    public static final int PID_TYPE = 0;
     public static double navxTo360(double angle){
         
         if (angle<=0) angle += 360;
