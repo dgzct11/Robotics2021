@@ -25,12 +25,15 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!RobotContainer.inAuto){
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     double rightY = RobotContainer.xbox_controller.getRawAxis(Constants.right_y_axis);
     driveTrain.setRightMotor(rightY);
     driveTrain.setLeftMotor(leftY*.99);
+    }
     
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override

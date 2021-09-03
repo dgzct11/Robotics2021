@@ -7,7 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 
@@ -35,6 +36,7 @@ public class DriveStraightDistance extends CommandBase {
   @Override
   public void initialize() {
     NavXGyro.ahrs.resetDisplacement();
+    RobotContainer.inAuto = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,6 +71,7 @@ public class DriveStraightDistance extends CommandBase {
   public void end(boolean interrupted) {
     driveTrain.stop();
     SmartDashboard.putString("going", "done");
+    RobotContainer.inAuto = false;
   }
 
   // Returns true when the command should end.

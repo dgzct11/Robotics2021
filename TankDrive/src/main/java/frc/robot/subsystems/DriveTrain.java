@@ -22,7 +22,7 @@ public class DriveTrain extends SubsystemBase {
   //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;
   public double currentRight = 0;
-  //leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
+  leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
   /*private final Encoder m_leftEncoder 
       new Encoder(Constants.kLeftEncoderPort,
                   Constants.kLeftEncoderReversed);*/
@@ -32,7 +32,7 @@ public class DriveTrain extends SubsystemBase {
       new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);*/
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    
+    leftSpeedC.configSelectedFeedbackSensors(FeedbackDevice.QuadEncoder, PID_TYPE, DEFUALT_TIMEOUT);
   }
 
   public void setRightMotor(double speed){

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.robot.commands.AutonomusCommands;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.DriveStraightDistance;
@@ -61,7 +62,7 @@ public class RobotContainer {
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
 
-
+  public static boolean inAuto = false;
 
   //Buttons
   /*Button aButtonTurn90Left = new JoystickButton(xbox_controller, Constants.a_button_num);
@@ -129,7 +130,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return driveStraightDistance;
+    return new AutonomusCommands(driveTrain);
   }
 
 /*
