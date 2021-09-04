@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.NavXGyro;
 
 public class DisplayMPX extends CommandBase {
@@ -30,7 +31,7 @@ public class DisplayMPX extends CommandBase {
   @Override
   public void execute() {
     
-    SmartDashboard.putNumber(   "IMU_Yaw",              Constants.navxTo360(ahrs.getYaw()));
+    SmartDashboard.putNumber(   "IMU_Yaw",              RobotContainer.navxTo360(ahrs.getYaw()));
  
     
     /* Display tilt-corrected, Magnetometer-based heading (requires             */
@@ -97,11 +98,11 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber("Drive Mode", Constants.driveMode);
     SmartDashboard.putNumber("Max Motor Percent", Constants.max_motor_percent);
     SmartDashboard.putNumber("Compass Direction", ahrs.getYaw()>0 ? ahrs.getYaw():ahrs.getYaw()+360);
-    SmartDashboard.putBoolean("equals 0", Constants.currentAngleEquals(0));
-    SmartDashboard.putBoolean("equals 90", Constants.currentAngleEquals(90));
-    SmartDashboard.putBoolean("equals 180", Constants.currentAngleEquals(180));
-    SmartDashboard.putBoolean("equals 270", Constants.currentAngleEquals(270));
-    SmartDashboard.putBoolean("Should turn Left to 0", Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), 0));
+    SmartDashboard.putBoolean("equals 0", RobotContainer.currentAngleEquals(0));
+    SmartDashboard.putBoolean("equals 90", RobotContainer.currentAngleEquals(90));
+    SmartDashboard.putBoolean("equals 180", RobotContainer.currentAngleEquals(180));
+    SmartDashboard.putBoolean("equals 270", RobotContainer.currentAngleEquals(270));
+    SmartDashboard.putBoolean("Should turn Left to 0", RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), 0));
   }
 
   // Called once the command ends or is interrupted.

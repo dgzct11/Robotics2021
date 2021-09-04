@@ -70,6 +70,7 @@ public final class Constants {
     public static final int PID_TYPE = 0;
     public static final double position_units_per_meter = 0;
     public static final double distance_between_wheels = 0;
+<<<<<<< HEAD
     public static double navxTo360(double angle){
         
         if (angle<=0) angle += 360;
@@ -106,4 +107,7 @@ public final class Constants {
     public static double distance(double[] p1, double[] p2){
         return Math.sqrt(Math.pow(p1[1]-p2[1], 2) + Math.pow(p1[0]-p2[0], 2));
     }
+=======
+    
+>>>>>>> ba29581a7623647a7278de7d8dc3e3c5ede0239f
 }

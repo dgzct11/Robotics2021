@@ -44,29 +44,29 @@ public class FieldOrientedDrive extends CommandBase {
     double leftX = RobotContainer.xbox_controller.getRawAxis(Constants.left_x_axis);
     double leftY = RobotContainer.xbox_controller.getRawAxis(Constants.left_y_axis);
     
-    double angle = Constants.stickTo360(rightX, rightY);
+    double angle = RobotContainer.stickTo360(rightX, rightY);
     SmartDashboard.putNumber("Field Oriented Angle", angle);
-    SmartDashboard.putNumber("Navx Angle", Constants.navxTo360( NavXGyro.ahrs.getYaw()));
+    SmartDashboard.putNumber("Navx Angle", RobotContainer.navxTo360( NavXGyro.ahrs.getYaw()));
      double speed = Math.sqrt(Math.pow(rightX, 2)+Math.pow(rightY, 2));
     
-    error = Constants.angleDistance(angle);
+    error = RobotContainer.angleDistance(angle);
       double angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
       speed*=-Constants.max_motor_percent;
       if (leftX != 0) {
         driveTrain.spin(leftX);
         return;
       }
-      SmartDashboard.putNumber("Angle Distance", Constants.angleDistance(angle));
-      SmartDashboard.putBoolean("Should go Back",Constants.angleDistance(angle) > 90 );
-      if (Constants.angleDistance(angle) > 90) {
-        error = Constants.angleDistance( (angle - 180 + 360)%360);
+      SmartDashboard.putNumber("Angle Distance", RobotContainer.angleDistance(angle));
+      SmartDashboard.putBoolean("Should go Back",RobotContainer.angleDistance(angle) > 90 );
+      if (RobotContainer.angleDistance(angle) > 90) {
+        error = RobotContainer.angleDistance( (angle - 180 + 360)%360);
         angle_corrector = Math.max(kp*error + ki*error*time + kd*(error-previous_error)/time, 1);
         
         speed *= -1;
-        SmartDashboard.putBoolean("Should Turn Left",Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360) );
+        SmartDashboard.putBoolean("Should Turn Left",RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360) );
         SmartDashboard.putNumber("Speed", speed);
    
-        if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360)){
+        if(RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), (angle - 180 + 360)%360)){
           //turn left
           driveTrain.setLeftMotor(speed);
           driveTrain.setRightMotor(speed/angle_corrector);
@@ -78,7 +78,7 @@ public class FieldOrientedDrive extends CommandBase {
         }
       }
       else {
-        if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
+        if(RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
           //turn left
           driveTrain.setLeftMotor(speed/angle_corrector);
           driveTrain.setRightMotor(speed);
