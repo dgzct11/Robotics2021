@@ -31,6 +31,8 @@ import frc.robot.commands.DriveStraightDistance;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
+import frc.robot.functional.Circle;
+import frc.robot.functional.Line;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
@@ -170,6 +172,12 @@ public class RobotContainer {
     return Math.sqrt( Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[0] - p2[0], 2));
   }
 
+  public static double getArcLength(Circle circle){
+    Line base = new Line(circle.startPoint, circle.endPoint);
+    double[] midPoint = base.getMidPoint();
+    double halfAngle = Math.atan(distance(midPoint, base.startPoint)/distance(midPoint, circle.center));
+    return halfAngle*2*circle.radius;
+  }
 /*
   public Command getPathFollowCommand(){
    
