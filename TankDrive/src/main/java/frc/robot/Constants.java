@@ -38,7 +38,7 @@ public final class Constants {
     public static final int b_button_num = 2;
     public static final int x_button_num = 3;
     public static final int y_button_num = 4;
-
+    
     //placeholder ports
     public static final int left_pad_num = 270;
     public static final int right_pad_num = 90;

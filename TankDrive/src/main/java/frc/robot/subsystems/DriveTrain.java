@@ -20,6 +20,7 @@ public class DriveTrain extends SubsystemBase {
   
   TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
   TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
+  
   //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;
   public double currentRight = 0;
@@ -35,7 +36,7 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
     rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
-    leftSpeedC.set(ControlMode.MotionMagic, demand);
+    //leftSpeedC.set(ControlMode.MotionMagic, demand);
   }
 
   public void setRightMotor(double speed){
