@@ -50,9 +50,9 @@ public class DriveStraightDistance extends CommandBase {
     
       double speed = Constants.max_motor_percent;
       
-      error = Constants.angleDistance(angle);
+      error = RobotContainer.angleDistance(angle);
       Constants.angle_correction_multiplier = Math.max(1, kp*error + ki*error*time + kd*(error-previous_error)/time);
-      if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
+      if(RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
             driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
             driveTrain.setRightMotor(speed);

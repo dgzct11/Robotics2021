@@ -48,10 +48,10 @@ public class TankDriveStraight extends CommandBase {
         angle=NavXGyro.ahrs.getYaw(); 
         Constants.angle_fixed = true;
       }
-      error = Constants.angleDistance(angle);
+      error = RobotContainer.angleDistance(angle);
       Constants.angle_correction_multiplier = 1+ kp*error + ki*error*time + kd*(error-previous_error)/time;
       if(leftY < 0) Constants.angle_correction_multiplier = 1/Constants.angle_correction_multiplier;
-      if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
+      if(RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
             //turn left
             driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
             driveTrain.setRightMotor(speed*Constants.angle_correction_multiplier);

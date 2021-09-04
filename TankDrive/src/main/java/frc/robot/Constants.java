@@ -70,36 +70,5 @@ public final class Constants {
     public static final int PID_TYPE = 0;
     public static final double position_units_per_meter = 0;
     public static final double distance_between_wheels = 0;
-    public static double navxTo360(double angle){
-        
-        if (angle<=0) angle += 360;
-
-        return 360-angle;
-    }
-    public static double to360(double angle) {
-        if (angle <= 0) angle += 360;
-
-        return Math.abs(angle%360);
-    }
-    public static double stickTo360(double x, double y){
-       return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
-    }
-    public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
-        double angle = navxTo360(currentNavxAngle);
-        boolean value = false;
-
-        if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
-        else value = angle<targetAngle && angle> targetAngle-180;
-        return value;
-    }
-    public static boolean currentAngleEquals(double angle){
-        double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
-        return ( shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error) ) && !(shouldTurnLeft((currentAngle+90)%360,angle));
-    }
-    public static double angleDistance(double targetAngle){
-        double angle = navxTo360(NavXGyro.ahrs.getYaw());
-        double distance = Math.abs(targetAngle - angle)%360;
-        if (distance > 180) distance = 360 - distance;
-        return distance;
-    }
+    
 }
