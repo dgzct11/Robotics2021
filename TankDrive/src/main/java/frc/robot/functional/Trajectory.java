@@ -5,6 +5,7 @@
 package frc.robot.functional;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 /** Add your docs here. */
 public class Trajectory {
@@ -40,7 +41,7 @@ public class Trajectory {
             Line line1 = new Line(startPoint[0], startPoint[1], firstPerpendicular);
             Line line2 = new Line(endPoint[0], endPoint[1], secondPerpendicular);
             double[] center = line1.getIntersection(line2);
-            double radius = Constants.distance(center, startPoint);
+            double radius = RobotContainer.distance(center, startPoint);
             Circle circle = new Circle(center, radius, startPoint, endPoint);
             lines[l] = line1;
             lines[l+1] = line2;
