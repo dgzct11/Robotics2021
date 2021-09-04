@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.subsystems.NavXGyro;
 
 /**
@@ -68,6 +68,8 @@ public final class Constants {
 	public static final DigitalSource kRightEncoderPort = null;
 	public static final DigitalSource kRightEncoderReversed = null;
     public static final int PID_TYPE = 0;
+    public static final double position_units_per_meter = 0;
+    public static final double distance_between_wheels = 0;
     public static double navxTo360(double angle){
         
         if (angle<=0) angle += 360;

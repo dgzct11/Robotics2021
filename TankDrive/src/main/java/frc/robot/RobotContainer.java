@@ -61,7 +61,7 @@ public class RobotContainer {
   private final TankDrive tankDrive;
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
-
+  
   public static boolean inAuto = false;
 
   //Buttons

@@ -29,11 +29,9 @@ public class DisplayMPX extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean(  "IMU_Connected",        ahrs.isConnected());
-    SmartDashboard.putBoolean(  "IMU_IsCalibrating",    ahrs.isCalibrating());
+    
     SmartDashboard.putNumber(   "IMU_Yaw",              Constants.navxTo360(ahrs.getYaw()));
-    SmartDashboard.putNumber(   "IMU_Pitch",            ahrs.getPitch());
-    SmartDashboard.putNumber(   "IMU_Roll",             ahrs.getRoll());
+ 
     
     /* Display tilt-corrected, Magnetometer-based heading (requires             */
     /* magnetometer calibration to be useful)                                   */
@@ -72,16 +70,7 @@ public class DisplayMPX extends CommandBase {
     /* for advanced users.  Before using this data, please consider whether     */
     /* the processed data (see above) will suit your needs.                     */
     
-    SmartDashboard.putNumber(   "RawGyro_X",            ahrs.getRawGyroX());
-    SmartDashboard.putNumber(   "RawGyro_Y",            ahrs.getRawGyroY());
-    SmartDashboard.putNumber(   "RawGyro_Z",            ahrs.getRawGyroZ());
-    SmartDashboard.putNumber(   "RawAccel_X",           ahrs.getRawAccelX());
-    SmartDashboard.putNumber(   "RawAccel_Y",           ahrs.getRawAccelY());
-    SmartDashboard.putNumber(   "RawAccel_Z",           ahrs.getRawAccelZ());
-    SmartDashboard.putNumber(   "RawMag_X",             ahrs.getRawMagX());
-    SmartDashboard.putNumber(   "RawMag_Y",             ahrs.getRawMagY());
-    SmartDashboard.putNumber(   "RawMag_Z",             ahrs.getRawMagZ());
-    SmartDashboard.putNumber(   "IMU_Temp_C",           ahrs.getTempC());
+   
     
     /* Omnimount Yaw Axis Information                                           */
     /* For more info, see http://navx-mxp.kauailabs.com/installation/omnimount  */

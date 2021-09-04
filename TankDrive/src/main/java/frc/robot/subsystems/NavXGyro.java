@@ -14,7 +14,9 @@ public class NavXGyro extends SubsystemBase {
   public NavXGyro() {
     ahrs = new AHRS(Constants.mxp_port);
   }
-
+  public static double getAngle(){
+    return Constants.navxTo360(ahrs.getYaw());
+  }
   
   @Override
   public void periodic() {
