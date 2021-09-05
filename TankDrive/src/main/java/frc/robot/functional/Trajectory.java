@@ -7,17 +7,25 @@ package frc.robot.functional;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-
+import java.util.ArrayList;
 /** Add your docs here. */
 public class Trajectory {
     double[][] points;
     double[] distances;
-    Line[] lines;
-    Circle[] circles;
-
+   
+    ArrayList<Segment> segments;
     double maxVelocity;
     double acceleration;
+    double breakAcceleration;
     double totalDistance = 0;
+    double currentDistance = 0;
+    double currentVelocity = 0;
+    int currentIndex = 0;
+    double accelerationDistance = 0;
+    double breakingDistance = 0;
+    double timeToMax = 0;
+    double timeToBreak = 0;
+    double currentLength = 0;
     public Trajectory(double[][] points, double[] distances){
         this.points = points;
         this.distances = distances;
@@ -25,22 +33,66 @@ public class Trajectory {
         getTotalDistance();
         
     }
+    public Position getPosition(double time){
+        /*
+        if currentDistance < acceldistance
+        update velocity
+        update currentDistance
+        
 
+        if current Distance > totalDistance - breaking distance
+        update velocity
+        update currentPosition
+        
+
+        else
+        update current Position
+
+        if currentPosition>segment.endPosiont, go to next segment. 
+
+        calculate position
+        return position
+        */
+        if(currentDistance > totalDistance){
+            Segment seg = segments.get(segments.size()-1);
+            return new Position(seg.endPoint, RobotContainer.angleFromSlope(seg.startPoint, seg.endPoint));
+        }
+        if(currentDistance < accelerationDistance){
+            //xf  = a/2t^2
+            currentDistance = acceleration/2*time*time;
+        }
+        else if(currentDistance > breakingDistance){
+            // xf = x + vt -a/2^t
+            currentDistance = breakingDistance + maxVelocity*(time-timeToBreak) - breakAcceleration/2*(time-timeToBreak)*(time-timeToBreak);
+        }
+        else{
+            // xf = a/2t^2
+            //t = sqrt(2x/a)
+            currentDistance += (time-timeToMax)*maxVelocity;
+        }
+
+        if(currentDistance > currentLength ){
+            currentIndex += 1;
+            currentLength += segments.get(currentIndex).length;
+        }
+
+        //turn currentDistance into position
+        return segments.get(currentIndex).getPosition(currentDistance-(currentLength-segments.get(currentIndex).length));
+        
+    }
+    
     public void getTotalDistance(){
-        for(Line line: lines){
-            totalDistance += RobotContainer.distance(line.startPoint, line.endPoint);
+        for(Segment seg: segments){
+           totalDistance += seg.length;
         }
-
-        for( Circle circle: circles){
-            totalDistance += RobotContainer.getArcLength(circle);
-        }
-       
+       accelerationDistance = (maxVelocity*maxVelocity)/(2*acceleration);
+       breakingDistance = totalDistance - (maxVelocity*maxVelocity)/(2*breakAcceleration);
+       timeToMax = Math.sqrt(2*accelerationDistance/acceleration);
+       timeToBreak = timeToMax + (breakingDistance-accelerationDistance)/maxVelocity;
+       currentLength = segments.get(0).length;
     }
     public void initializeSegments(){
-        lines = new Line[points.length-1];
-        circles = new Circle[points.length - 2];
-        int l = 0;
-        int c = 0;
+        segments = new ArrayList<Segment>();
         double[] startPoint = points[0];
         double secondSlope = 0;
         for(int i = 0; i<points.length-2; i++){
@@ -67,13 +119,11 @@ public class Trajectory {
             double radius = RobotContainer.distance(center, startPoint);
             Circle circle = new Circle(center, radius, circleStart, circleEnd);
             Line line = new Line(startPoint, circleStart);
-            lines[l] = line;
-            l++;
-            circles[c] = circle;
-            c++;
+            segments.add(line);
+            segments.add(circle);
             startPoint = circleEnd;
         }
-        lines[lines.length-1] = new Line(startPoint, points[-1]);
+        segments.add(new Line(startPoint, points[-1]));
 
 
 

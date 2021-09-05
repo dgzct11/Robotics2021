@@ -178,6 +178,10 @@ public class RobotContainer {
     double halfAngle = Math.atan(distance(midPoint, base.startPoint)/distance(midPoint, circle.center));
     return halfAngle*2*circle.radius;
   }
+
+  public static double angleFromSlope(double[] start, double[] end){
+    return Math.toDegrees(Math.atan2((end[1] - start[1]), end[0] - start[0]));
+  }
 /*
   public Command getPathFollowCommand(){
    

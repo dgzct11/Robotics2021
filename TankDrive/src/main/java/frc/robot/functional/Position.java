@@ -12,6 +12,11 @@ public class Position {
         x = _x;
         y = _y;
     }
+    public Position(double[] pos, double _angle){
+        x = pos[0];
+        y = pos[1];
+        angle = _angle;
+    }
 
     public void addAngle(double a){
         angle = (angle+a+360)%360;

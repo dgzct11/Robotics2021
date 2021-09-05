@@ -7,15 +7,15 @@ package frc.robot.functional;
 import frc.robot.RobotContainer;
 
 /** Add your docs here. */
-public class Line {
+public class Line extends Segment{
     public double slope;
-    public double[] startPoint, endPoint;
-  
+   
+   
     public Line(double[] start, double[] end){
         startPoint = start;
         endPoint = end;
         slope = (start[1] - end[1]) / (start[0]-end[0]);
-        
+        length = RobotContainer.distance(start, end);
 
     }
     public Line(double[] end, double s){
@@ -37,5 +37,10 @@ public class Line {
         result[0] = (endPoint[0] - startPoint[0])/2 + startPoint[0]; 
         result[1] = (endPoint[1] - startPoint[1])/2 + startPoint[1];
         return result; 
+    }
+    public Position getPosition(double distance){
+        return new Position(distance/length * (endPoint[0]-startPoint[0]) + startPoint[0], 
+        distance/length * (endPoint[0]-startPoint[0]) + startPoint[0],
+         RobotContainer.angleFromSlope(startPoint, endPoint));
     }
 }
