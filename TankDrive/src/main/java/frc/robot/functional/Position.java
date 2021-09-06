@@ -7,6 +7,7 @@ package frc.robot.functional;
 /** Add your docs here. */
 public class Position {
     public double x, y, angle;
+    String str;
     public Position(double _x, double _y, double _angle){
         angle = _angle;
         x = _x;
