@@ -13,10 +13,12 @@ public class FollowTrajectory extends CommandBase {
   /** Creates a new FollowTrajectory. */
   DriveTrain driveTrain;
   Odometry odometry;
-  public FollowTrajectory(DriveTrain dt, Odometry od) {
+  Trajectory trajectory;
+  public FollowTrajectory(DriveTrain dt, Odometry od, double[] points, double[] distances) {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     odometry = od;
+    trajectory = new Trajectory(points,distances);
   }
 
   // Called when the command is initially scheduled.
