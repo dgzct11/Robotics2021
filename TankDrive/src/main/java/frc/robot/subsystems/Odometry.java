@@ -36,6 +36,9 @@ public class Odometry extends SubsystemBase {
     currentPosition.add(dx, dy);
     currentPosition.addAngle(angleDifference);
 
+    previousPosLeft += currentPosLeft;
+    previousPosRight += currentPosRight;
+
   }
   public Position getPosition(){
     return currentPosition;

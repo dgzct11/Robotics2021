@@ -18,8 +18,8 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   
-  TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
-  TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
+  public TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
+  public TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
   
   //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;

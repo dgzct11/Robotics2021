@@ -26,6 +26,7 @@ public class Trajectory {
     double timeToMax = 0;
     double timeToBreak = 0;
     double currentLength = 0;
+    
     public Trajectory(double[][] points, double[] distances){
         this.points = points;
         this.distances = distances;
