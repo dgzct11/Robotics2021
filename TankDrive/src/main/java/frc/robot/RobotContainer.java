@@ -149,8 +149,16 @@ public class RobotContainer {
   public static double stickTo360(double x, double y){
    return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
   }
-  public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
+  public static boolean shouldTurnLeftNavx(double currentNavxAngle, double targetAngle){
     double angle = navxTo360(currentNavxAngle);
+    boolean value = false;
+
+    if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
+    else value = angle<targetAngle && angle> targetAngle-180;
+    return value;
+  }
+  public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
+    double angle = currentNavxAngle;
     boolean value = false;
 
     if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;

@@ -23,4 +23,6 @@ public class Segment {
     public Position getPosition(double distance){
         return new Position(0,0,0);
     }
+  
 }
+

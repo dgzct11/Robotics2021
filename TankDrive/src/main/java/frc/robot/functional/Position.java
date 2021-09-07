@@ -26,4 +26,10 @@ public class Position {
         x += dx;
         y += dy;
     }
+    public boolean equals(Position pos){
+        return pos.x == x && pos.y == y && pos.angle == angle;
+    }
+    public String toString(){
+        return String.format("\nPosition\n\tx: %f\n\ty: %f\n\tangle: %f\n", x, y, angle);
+    }
 }

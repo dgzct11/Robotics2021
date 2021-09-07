@@ -50,11 +50,16 @@ public class Line extends Segment{
     }
     public Position getPosition(double distance){
         return new Position(distance/length * (endPoint[0]-startPoint[0]) + startPoint[0], 
-        distance/length * (endPoint[0]-startPoint[0]) + startPoint[0],
+        distance/length * (endPoint[1]-startPoint[1]) + startPoint[1],
          RobotContainer.angleFromSlope(startPoint, endPoint));
     }
     public String toString(){
+        try{
         return String.format("Line: \n\tslope: %f\n\tstart: %f %f\n\tend: %f %f\n\tlength: %f\n", slope,
         startPoint[0], startPoint[1], endPoint[0], endPoint[1], length);
+        } catch(NullPointerException e){
+            return String.format("\nLine: \n\tslope: %f\n\tpoint: %f %f\n", slope,
+            endPoint[0], endPoint[1],length);
+        }
     }
 }

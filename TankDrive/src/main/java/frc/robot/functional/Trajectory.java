@@ -17,68 +17,83 @@ public class Trajectory {
     double maxVelocity;
     double acceleration;
     double breakAcceleration;
+
     double totalDistance = 0;
-    double currentDistance = 0;
-    double currentVelocity = 0;
+    
     int currentIndex = 0;
-    double accelerationDistance = 0;
-    double breakingDistance = 0;
-    double timeToMax = 0;
-    double timeToBreak = 0;
-    double currentLength = 0;
-    public Trajectory(double[][] points, double[] distances){
+    
+    public double timeToMax = 0;
+    public double timeToBreak = 0;
+    public double totalTime = 0;
+    public double distanceToAccelerate;
+    public double distanceToBreak;
+    public Trajectory(double[][] points, double[] distances, double a, double mv){
         this.points = points;
         this.distances = distances;
+        acceleration = a;
+        maxVelocity = mv;
         initializeSegments();
         getTotalDistance();
+        /* timetomax = maxV/a 
+        distance to accelerate: maxV^2 = 2ax
+        */
+        timeToMax = maxVelocity/acceleration;
+        timeToBreak = (maxVelocity/breakAcceleration);
+        distanceToAccelerate = (maxVelocity*maxVelocity/(2*acceleration));
+        distanceToBreak = (maxVelocity*maxVelocity/(2*breakAcceleration));
+        totalTime = (totalDistance - distanceToAccelerate - distanceToBreak )/maxVelocity + timeToMax + timeToBreak;
         
     }
+    public void setMaxAV(double a, double v){
+        acceleration = a;
+        maxVelocity = v;
+        breakAcceleration = a;
+    }
+    public Position getEndPoint(){
+        Segment seg = segments.get(segments.size()-1);
+            return new Position(seg.endPoint, RobotContainer.angleFromSlope(seg.startPoint, seg.endPoint));
+    }
     public Position getPosition(double time){
+        time = time/1000;
         /*
-        if currentDistance < acceldistance
-        update velocity
-        update currentDistance
-        
+       if time<acceltime:
+        use x = x + vt + a/2t^2
+        if time>breakingTime:
 
-        if current Distance > totalDistance - breaking distance
-        update velocity
-        update currentPosition
-        
-
-        else
-        update current Position
-
-        if currentPosition>segment.endPosiont, go to next segment. 
-
-        calculate position
-        return position
+        else:
         */
-        if(currentDistance > totalDistance){
+        double distance;
+        if(time>totalTime){
             Segment seg = segments.get(segments.size()-1);
             return new Position(seg.endPoint, RobotContainer.angleFromSlope(seg.startPoint, seg.endPoint));
         }
-        if(currentDistance < accelerationDistance){
-            //xf  = a/2t^2
-            currentDistance = acceleration/2*time*time;
+        if(time <= timeToMax){
+             distance = acceleration/2*time*time;
+            
+           
         }
-        else if(currentDistance > breakingDistance){
-            // xf = x + vt -a/2^t
-            currentDistance = breakingDistance + maxVelocity*(time-timeToBreak) - breakAcceleration/2*(time-timeToBreak)*(time-timeToBreak);
+        else if(time >= totalTime-timeToBreak){
+            distance = totalDistance-distanceToBreak + maxVelocity*(time-(totalTime-timeToBreak)) -breakAcceleration/2*Math.pow((time-(totalTime-timeToBreak)),2);
         }
         else{
-            // xf = a/2t^2
-            //t = sqrt(2x/a)
-            currentDistance += (time-timeToMax)*maxVelocity;
+            distance = distanceToAccelerate + maxVelocity*(time-timeToMax);
         }
-
-        if(currentDistance > currentLength ){
-            currentIndex += 1;
-            currentLength += segments.get(currentIndex).length;
+        if(distance>totalDistance){
+            Segment seg = segments.get(segments.size()-1);
+            return new Position(seg.endPoint, RobotContainer.angleFromSlope(seg.startPoint, seg.endPoint));
         }
+        double currentDistance = 0;
+        int index = 0;
+        while(index<segments.size()-1 && currentDistance +segments.get(index).length <= distance){
+            currentDistance += segments.get(index).length;   
+            index ++;
+        }
+       
+        
+        return segments.get(index).getPosition(distance - currentDistance );
 
         //turn currentDistance into position
-        return segments.get(currentIndex).getPosition(currentDistance-(currentLength-segments.get(currentIndex).length));
-        
+       
     }
     
     public String toString(){
@@ -91,16 +106,12 @@ public class Trajectory {
         for(Segment seg: segments){
            totalDistance += seg.length;
         }
-       accelerationDistance = (maxVelocity*maxVelocity)/(2*acceleration);
-       breakingDistance = totalDistance - (maxVelocity*maxVelocity)/(2*breakAcceleration);
-       timeToMax = Math.sqrt(2*accelerationDistance/acceleration);
-       timeToBreak = timeToMax + (breakingDistance-accelerationDistance)/maxVelocity;
-       currentLength = segments.get(0).length;
+      
     }
     public void initializeSegments(){
         segments = new ArrayList<Segment>();
         double[] startPoint = points[0];
-        double secondSlope = 0;
+
         for(int i = 0; i<points.length-2; i++){
             //establish points
             
@@ -111,18 +122,21 @@ public class Trajectory {
             double[] circleStart = { (cornerPoint[0]-startPoint[0])*ratio + startPoint[0], (cornerPoint[1]-startPoint[1])*ratio + startPoint[1] };
 
             double distance2 = RobotContainer.distance(nextCorner, cornerPoint);
-            double ratio2 = (distance2 - distances[i])/distance2;
+            double ratio2 = (distances[i])/distance2;
             double[] circleEnd = { (nextCorner[0]-cornerPoint[0])*ratio2 + cornerPoint[0], (nextCorner[1]-cornerPoint[1])*ratio2 + cornerPoint[1] };
-
+           
             //find circle equation
             double firstSlope = (startPoint[1]-cornerPoint[1])/(startPoint[0]-cornerPoint[0]);
             double firstPerpendicular = -1/firstSlope;
-            secondSlope = (nextCorner[1]-cornerPoint[1])/(nextCorner[0]-cornerPoint[0]);
+            double secondSlope = (nextCorner[1]-cornerPoint[1])/(nextCorner[0]-cornerPoint[0]);
             double secondPerpendicular = -1/secondSlope;
             Line line1 = new Line(circleStart , firstPerpendicular);
+            //fix circle end;
             Line line2 = new Line(circleEnd,  secondPerpendicular);
+            
             double[] center = line1.getIntersection(line2);
-            double radius = RobotContainer.distance(center, startPoint);
+            double radius = RobotContainer.distance(center, circleStart);
+           
             Circle circle = new Circle(center, radius, circleStart, circleEnd);
             Line line = new Line(startPoint, circleStart);
             segments.add(line);

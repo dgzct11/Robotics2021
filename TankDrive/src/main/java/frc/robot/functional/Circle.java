@@ -23,22 +23,25 @@ public class Circle extends Segment {
 
     public Position getPosition(double distance){
         double angleDiff = distance/(2*Math.PI*radius) * 360;
+
         double startAngle = getAngle(startPoint);
         double endAngle = getAngle(endPoint);
-        
+        System.out.printf("\nangleDiff: %f\nstartAngle: %f\nendAngle: %f\nshouldTurnLeft: %b\n", angleDiff, startAngle, endAngle, RobotContainer.shouldTurnLeft(startAngle, endAngle));
         if(RobotContainer.shouldTurnLeft(startAngle, endAngle)){
-            return new Position(radius*Math.cos(angleDiff + startAngle)+center[0], radius*Math.sin( startAngle + angleDiff)+center[1], (startAngle+angleDiff+90)%360);
+           
+            return new Position(radius*Math.cos(Math.toRadians(angleDiff + startAngle))+center[0], center[1] + radius*Math.sin( Math.toRadians(startAngle + angleDiff)), (startAngle+angleDiff+90)%360);
         }
-        return new Position(radius*Math.cos(startAngle - angleDiff)+center[0], radius*Math.sin(startAngle - angleDiff)+center[1], (startAngle-angleDiff-270)%360);
+   
+        return new Position(radius*Math.cos(Math.toRadians(startAngle - angleDiff))+center[0], radius*Math.sin(Math.toRadians(startAngle - angleDiff))+center[1], (startAngle-angleDiff-270)%360);
  
 
     }
     
     public double getAngle(double[] point){
-        return Math.toDegrees(Math.atan2(point[1] - center[1], point[0] - center[0]));
+        return (Math.toDegrees(Math.atan2(point[1] - center[1], point[0] - center[0])) + 360)%360;
     }
     public String toString(){
-        return String.format("Circle: \n\tcenter: %f %f\n\tstart: %f %f\n\tend: %f %f\n\tlength: %f\n", center[0], center[1], 
+        return String.format("Circle: \n\tradius: %f\n\tcenter: %f %f\n\tstart: %f %f\n\tend: %f %f\n\tlength: %f\n", radius,center[0], center[1], 
         startPoint[0], startPoint[1], endPoint[0], endPoint[1], length);
     }
 }
