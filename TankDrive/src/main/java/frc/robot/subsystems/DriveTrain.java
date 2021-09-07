@@ -34,8 +34,8 @@ public class DriveTrain extends SubsystemBase {
       new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);*/
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
-    rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
+    leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
+    rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
     //leftSpeedC.set(ControlMode.MotionMagic, demand);
   }
 

@@ -28,14 +28,17 @@ import frc.robot.commands.AutonomusCommands;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.DriveStraightDistance;
+import frc.robot.commands.EmergencyStop;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
+import frc.robot.commands.UpdatePosition;
 import frc.robot.functional.Circle;
 import frc.robot.functional.Line;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
+import frc.robot.subsystems.Odometry;
 //import jdk.vm.ci.meta.Constant;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -58,12 +61,13 @@ public class RobotContainer {
   //subsystems
   private final NavXGyro navx;
   private final DriveTrain driveTrain;
+  Odometry odometry;
 
   //commands
   private final TankDrive tankDrive;
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
-  
+  private final UpdatePosition up;
   public static boolean inAuto = false;
 
   //Buttons
@@ -80,6 +84,7 @@ public class RobotContainer {
 
   Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
   Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
+  Button bButtonEmergencyStop = new JoystickButton(xbox_controller, Constants.b_button_num);
   DriveStraightDistance driveStraightDistance;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -87,19 +92,21 @@ public class RobotContainer {
     //subsytems 
     driveTrain = new DriveTrain();
     navx = new NavXGyro();
-    
+    odometry = new Odometry(driveTrain);
     //commands
     tankDrive = new TankDrive(driveTrain);
     tankDrive.addRequirements(driveTrain);
-  
+
+    up = new UpdatePosition(odometry);
     tn = new TurnAngle(driveTrain, 90);
     tn.addRequirements(navx);
     tn.addRequirements(driveTrain);
-    displayMPX = new DisplayMPX(navx);
+    displayMPX = new DisplayMPX(navx, odometry);
     displayMPX.addRequirements(navx);
-   
+    up.addRequirements(odometry);
     driveTrain.setDefaultCommand(tankDrive);
     navx.setDefaultCommand(displayMPX);
+    odometry.setDefaultCommand(up);
     configureButtonBindings();
     driveStraightDistance = new DriveStraightDistance(0.5, 0, driveTrain);
     
@@ -123,6 +130,7 @@ public class RobotContainer {
     xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
     rightButtonIncMotor.whenPressed(new ChangeMaxSpeed(0.1));
     leftButtonDecMotor.whenPressed(new ChangeMaxSpeed(-0.1));
+    bButtonEmergencyStop.whenPressed(new EmergencyStop(driveTrain));
   }
 
   /**
@@ -132,7 +140,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomusCommands(driveTrain);
+    return null;//new AutonomusCommands(driveTrain);
   }
 
   public static double navxTo360(double angle){
@@ -149,7 +157,7 @@ public class RobotContainer {
   public static double stickTo360(double x, double y){
    return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
   }
-  public static boolean shouldTurnLeftNavx(double currentNavxAngle, double targetAngle){
+  public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
     double angle = navxTo360(currentNavxAngle);
     boolean value = false;
 
@@ -157,7 +165,7 @@ public class RobotContainer {
     else value = angle<targetAngle && angle> targetAngle-180;
     return value;
   }
-  public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
+  public static boolean shouldTurnLeftAngle(double currentNavxAngle, double targetAngle){
     double angle = currentNavxAngle;
     boolean value = false;
 

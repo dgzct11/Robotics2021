@@ -26,7 +26,7 @@ public class FollowTrajectory extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     odometry = od;
-    trajectory = new Trajectory(points,distances);
+    trajectory = new Trajectory(points,distances,1,1);
     
   }
 
