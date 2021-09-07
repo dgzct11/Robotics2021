@@ -37,4 +37,9 @@ public class Circle extends Segment {
     public double getAngle(double[] point){
         return Math.toDegrees(Math.atan2(point[1] - center[1], point[0] - center[0]));
     }
+    public String toString(){
+        return String.format("Circle: \n\tcenter: %f %f\n\tstart: %f %f\n\tend: %f %f\n\tlength: %f\n", center[0], center[1], 
+        startPoint[0], startPoint[1], endPoint[0], endPoint[1], length);
+    }
 }
+

@@ -26,7 +26,6 @@ public class Trajectory {
     double timeToMax = 0;
     double timeToBreak = 0;
     double currentLength = 0;
-    
     public Trajectory(double[][] points, double[] distances){
         this.points = points;
         this.distances = distances;
@@ -82,6 +81,12 @@ public class Trajectory {
         
     }
     
+    public String toString(){
+        String result = "";
+        for(Segment segment: segments)
+            result += segment.toString();
+        return result;
+    }
     public void getTotalDistance(){
         for(Segment seg: segments){
            totalDistance += seg.length;
@@ -124,7 +129,7 @@ public class Trajectory {
             segments.add(circle);
             startPoint = circleEnd;
         }
-        segments.add(new Line(startPoint, points[-1]));
+        segments.add(new Line(startPoint, points[points.length-1]));
 
 
 

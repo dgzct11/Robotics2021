@@ -26,7 +26,17 @@ public class Line extends Segment{
     public double[] getIntersection(Line line){
         
         double[] result = new double[2];
-        
+        if(Math.abs(line.slope) == Double.POSITIVE_INFINITY){
+            result[0] = line.endPoint[0];
+            result[1] =  slope * (result[0] - endPoint[0]) + endPoint[1];
+            return result;
+        }
+        else if(Math.abs(slope) == Double.POSITIVE_INFINITY){
+            result[0] =  endPoint[0];
+            result[1] = line.slope * (result[0] - line.endPoint[0]) + line.endPoint[1];
+            return result;
+        }
+
         result[0] = (-line.slope * line.endPoint[0] + line.endPoint[1] - endPoint[1] + slope * endPoint[0])/(slope - line.slope);
         result[1] = slope * (result[0] - endPoint[0]) + endPoint[1];
         return result;
@@ -42,5 +52,9 @@ public class Line extends Segment{
         return new Position(distance/length * (endPoint[0]-startPoint[0]) + startPoint[0], 
         distance/length * (endPoint[0]-startPoint[0]) + startPoint[0],
          RobotContainer.angleFromSlope(startPoint, endPoint));
+    }
+    public String toString(){
+        return String.format("Line: \n\tslope: %f\n\tstart: %f %f\n\tend: %f %f\n\tlength: %f\n", slope,
+        startPoint[0], startPoint[1], endPoint[0], endPoint[1], length);
     }
 }
