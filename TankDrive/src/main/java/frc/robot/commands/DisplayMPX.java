@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.functional.Position;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 import frc.robot.subsystems.Odometry;
 
@@ -19,11 +20,13 @@ public class DisplayMPX extends CommandBase {
   private AHRS ahrs;
   private NavXGyro navx;
   Odometry odometry;
-  public DisplayMPX(NavXGyro n, Odometry od) {
+  DriveTrain driveTrain;
+  public DisplayMPX(NavXGyro n, Odometry od, DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
     ahrs = NavXGyro.ahrs;
     navx = n;
     odometry = od;
+    driveTrain = dt;
     addRequirements(navx);
   }
 
@@ -48,6 +51,8 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber("Odometry x: ", currentPosition.x );
     SmartDashboard.putNumber("Odometry y: ", currentPosition.y);
     SmartDashboard.putNumber("Odometry angle ", currentPosition.angle);
+    SmartDashboard.putNumber("Left Motor Position", driveTrain.leftSpeedC.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Right Motor Position", driveTrain.rightSpeedC.getSelectedSensorPosition());
 
     SmartDashboard.putNumber("Drive Mode: ", Constants.driveMode);
   

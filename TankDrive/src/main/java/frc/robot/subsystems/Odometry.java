@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.functional.Position;
 
 public class Odometry extends SubsystemBase {
@@ -24,20 +25,21 @@ public class Odometry extends SubsystemBase {
     //figure out change in angle
     double currentPosLeft = driveTrain.leftSpeedC.getSelectedSensorPosition()/Constants.position_units_per_meter;
     double currentPosRight = driveTrain.rightSpeedC.getSelectedSensorPosition()/Constants.position_units_per_meter;
-    double angleDifference = Math.atan2(currentPosRight-currentPosLeft, Constants.distance_between_wheels);
-  
+    double angleDifference = Math.toDegrees(Math.atan2(currentPosRight-currentPosLeft, Constants.distance_between_wheels));
+    //
 
     //add current position
     double posChangeAvarage = (currentPosLeft-previousPosLeft + currentPosRight-previousPosRight)/2;
-    double dx = Math.sin(currentPosition.angle)*posChangeAvarage;
-    double dy = Math.cos(currentPosition.angle)*posChangeAvarage;
+    double dx = Math.sin(Math.toRadians(currentPosition.angle))*posChangeAvarage;
+    double dy = Math.cos(Math.toRadians(currentPosition.angle))*posChangeAvarage;
 
+    previousPosLeft = currentPosLeft;
+    previousPosRight = currentPosRight;
     //update current position
     currentPosition.add(dx, dy);
     currentPosition.addAngle(angleDifference);
 
-    previousPosLeft += currentPosLeft;
-    previousPosRight += currentPosRight;
+    
 
   }
   public Position getPosition(){
