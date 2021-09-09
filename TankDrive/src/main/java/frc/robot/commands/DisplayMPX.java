@@ -57,6 +57,8 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber("Drive Mode: ", Constants.driveMode);
   
     SmartDashboard.putNumber("Max Motor Percent", Constants.max_motor_percent);
+    SmartDashboard.putNumber("Left Position", driveTrain.leftSpeedC.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Right Position", driveTrain.leftSpeedC.getSelectedSensorPosition());
    
   }
 

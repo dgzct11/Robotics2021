@@ -101,7 +101,7 @@ public class RobotContainer {
     tn = new TurnAngle(driveTrain, 90);
     tn.addRequirements(navx);
     tn.addRequirements(driveTrain);
-    displayMPX = new DisplayMPX(navx, odometry);
+    displayMPX = new DisplayMPX(navx,odometry,driveTrain);
     displayMPX.addRequirements(navx);
     up.addRequirements(odometry);
     driveTrain.setDefaultCommand(tankDrive);
