@@ -29,6 +29,7 @@ import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.DriveStraightDistance;
 import frc.robot.commands.EmergencyStop;
+import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
@@ -140,7 +141,15 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;//new AutonomusCommands(driveTrain);
+    double[][] points = {
+      {0.0,0.0},
+      {0.17,2.13},
+      {2.42,2.07}
+      };
+      double[] distances = {
+        1.1742471872224396,
+        };
+    return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
   }
 
   public static double navxTo360(double angle){

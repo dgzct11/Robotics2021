@@ -42,8 +42,7 @@ public class DisplayMPX extends CommandBase {
  
 
     
-    SmartDashboard.putNumber(   "Velocity_X",           ahrs.getVelocityX());
-    SmartDashboard.putNumber(   "Velocity_Y",           ahrs.getVelocityY());
+
     SmartDashboard.putNumber(   "Displacement_X",       ahrs.getDisplacementX());
     SmartDashboard.putNumber(   "Displacement_Y",       ahrs.getDisplacementY());
     
@@ -57,8 +56,7 @@ public class DisplayMPX extends CommandBase {
     SmartDashboard.putNumber("Drive Mode: ", Constants.driveMode);
   
     SmartDashboard.putNumber("Max Motor Percent", Constants.max_motor_percent);
-    SmartDashboard.putNumber("Left Position", driveTrain.leftSpeedC.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Right Position", driveTrain.leftSpeedC.getSelectedSensorPosition());
+   
    
   }
 
