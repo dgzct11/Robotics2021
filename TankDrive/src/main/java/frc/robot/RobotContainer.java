@@ -149,7 +149,8 @@ public class RobotContainer {
       double[] distances = {
         1.1742471872224396,
         };
-    return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
+    //return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
+        return new DriveStraightDistance(1, 1, driveTrain);
   }
 
   public static double navxTo360(double angle){

@@ -26,7 +26,7 @@ public class FollowTrajectory extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     driveTrain = dt;
     odometry = od;
-    trajectory = new Trajectory(points,distances,1,1);
+    trajectory = new Trajectory(points,distances,.1,.1);
     
   }
 
@@ -35,6 +35,8 @@ public class FollowTrajectory extends CommandBase {
   public void initialize() {
     RobotContainer.inAuto = true;
     initialTime = System.currentTimeMillis(); 
+    driveTrain.leftSpeedC.setSelectedSensorPosition(0);
+    driveTrain.rightSpeedC.setSelectedSensorPosition(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +44,7 @@ public class FollowTrajectory extends CommandBase {
   public void execute() {
     odometry.updatePosition();
     Position currentPosition = odometry.getPosition();
-    Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000);
+    Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000+0.0001);
     // cos angle = wheelDist/2/hyptonuse 
     double currentPosLeft = driveTrain.leftSpeedC.getSelectedSensorPosition();
     double currentPosRight = driveTrain.rightSpeedC.getSelectedSensorPosition();
@@ -56,7 +58,7 @@ public class FollowTrajectory extends CommandBase {
     double[] rightFront = {newPos.x + Math.cos(newPos.angle)*Constants.distance_between_wheels/2,
       newPos.y + Math.sin(newPos.angle) * Constants.distance_between_wheels/2  };
     
-    driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, RobotContainer.distance(leftBack, leftFront)* Constants.position_units_per_meter+currentPosLeft);
+    driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, -RobotContainer.distance(leftBack, leftFront)* Constants.position_units_per_meter+currentPosLeft);
     driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, RobotContainer.distance(rightBack, rightFront)* Constants.position_units_per_meter+currentPosRight);
   
   }
