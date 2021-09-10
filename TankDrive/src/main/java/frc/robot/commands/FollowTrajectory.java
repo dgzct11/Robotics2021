@@ -42,9 +42,12 @@ public class FollowTrajectory extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //find currentPosition
+    //find the position of the robot after some time interval
+    //
     odometry.updatePosition();
     Position currentPosition = odometry.getPosition();
-    Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000+0.0001);
+    Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000+0.01);
     // cos angle = wheelDist/2/hyptonuse 
     double currentPosLeft = driveTrain.leftSpeedC.getSelectedSensorPosition();
     double currentPosRight = driveTrain.rightSpeedC.getSelectedSensorPosition();

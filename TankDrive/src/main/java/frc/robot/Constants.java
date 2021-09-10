@@ -70,5 +70,6 @@ public final class Constants {
     public static final int PID_TYPE = 0;
     public static final double position_units_per_meter =(10277+11467)*(1/0.479);
     public static final double distance_between_wheels = 0.698;
+    public static final double max_acceleration = 1;
     
 }

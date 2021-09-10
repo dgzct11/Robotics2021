@@ -36,6 +36,8 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
     rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
+    leftSpeedC.configMotionAcceleration(Constants.max_acceleration*Constants.position_units_per_meter*10);
+    rightSpeedC.configMotionAcceleration(Constants.max_acceleration*Constants.position_units_per_meter*10);
     //leftSpeedC.set(ControlMode.MotionMagic, demand);
   }
 
