@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.functional.Line;
 import frc.robot.functional.Position;
 import frc.robot.functional.Trajectory;
 
@@ -48,22 +49,8 @@ public class FollowTrajectory extends CommandBase {
     odometry.updatePosition();
     Position currentPosition = odometry.getPosition();
     Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000+0.01);
-    // cos angle = wheelDist/2/hyptonuse 
-    double currentPosLeft = driveTrain.leftSpeedC.getSelectedSensorPosition();
-    double currentPosRight = driveTrain.rightSpeedC.getSelectedSensorPosition();
-    double[] leftBack =  { currentPosition.x - Math.cos(currentPosition.angle)*Constants.distance_between_wheels/2,
-    currentPosition.y - Math.sin(currentPosition.angle) * Constants.distance_between_wheels/2 };
-    double[] rightBack =  {currentPosition.x + Math.cos(currentPosition.angle)*Constants.distance_between_wheels/2,
-      currentPosition.y + Math.sin(currentPosition.angle) * Constants.distance_between_wheels/2  };
-   
-      double[] leftFront = { newPos.x - Math.cos(newPos.angle)*Constants.distance_between_wheels/2,
-      newPos.y - Math.sin(newPos.angle) * Constants.distance_between_wheels/2 };
-    double[] rightFront = {newPos.x + Math.cos(newPos.angle)*Constants.distance_between_wheels/2,
-      newPos.y + Math.sin(newPos.angle) * Constants.distance_between_wheels/2  };
+    Line lineStart = new Line();
     
-    driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, -RobotContainer.distance(leftBack, leftFront)* Constants.position_units_per_meter+currentPosLeft);
-    driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, RobotContainer.distance(rightBack, rightFront)* Constants.position_units_per_meter+currentPosRight);
-  
   }
 
   // Called once the command ends or is interrupted.
