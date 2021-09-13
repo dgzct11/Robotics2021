@@ -22,6 +22,7 @@ public class Line extends Segment{
         endPoint = end;
         slope = s;
     }
+    
 
     public double[] getIntersection(Line line){
         

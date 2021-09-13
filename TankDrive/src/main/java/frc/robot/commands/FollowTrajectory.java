@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Odometry;
@@ -49,8 +50,24 @@ public class FollowTrajectory extends CommandBase {
     odometry.updatePosition();
     Position currentPosition = odometry.getPosition();
     Position newPos = trajectory.getPosition((System.currentTimeMillis()-initialTime)/1000+0.01);
-    Line lineStart = new Line();
+    double[] currentPosXY = {currentPosition.x, currentPosition.y};
+    double[] newPosXY = {newPos.x, newPos.y};
+    Line lineStart = new Line(currentPosXY, Math.tan(Math.toRadians(currentPosition.angle)));
+    Line lineEnd = new Line(newPosXY, Math.tan(Math.toRadians(newPos.angle)));
+    double[] center = lineStart.getIntersection(lineEnd);
     
+    double radius = RobotContainer.distance(center, currentPosXY);
+    double theta = 2*Math.asin(RobotContainer.distance(currentPosXY, newPosXY)/2/radius);
+    double outer = theta*(radius+Constants.distance_between_wheels/2);
+    double inner = theta*(radius - Constants.distance_between_wheels/2);
+    if(RobotContainer.shouldTurnLeft(currentPosition.angle, newPos.angle)){
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, driveTrain.leftSpeedC.getSelectedSensorPosition() + inner*Constants.position_units_per_meter);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, driveTrain.rightSpeedC.getSelectedSensorPosition() + outer*Constants.position_units_per_meter);
+    }
+    else{
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, driveTrain.leftSpeedC.getSelectedSensorPosition() + outer * Constants.position_units_per_meter);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, driveTrain.rightSpeedC.getSelectedSensorPosition() + inner * Constants.position_units_per_meter);
+    }
   }
 
   // Called once the command ends or is interrupted.

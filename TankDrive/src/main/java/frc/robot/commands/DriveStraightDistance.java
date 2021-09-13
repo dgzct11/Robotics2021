@@ -50,8 +50,10 @@ public class DriveStraightDistance extends CommandBase {
   public void execute() {
       time = System.currentTimeMillis()/1000-startTime+0.04;
       
-      driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, -time*1*Constants.position_units_per_meter);
-      driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, time*1*Constants.position_units_per_meter);
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity, 1*Constants.position_units_per_meter/10);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity, -1*Constants.position_units_per_meter/10);
+      //driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, time*1*Constants.position_units_per_meter);
+      //driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, -time*1*Constants.position_units_per_meter);
   }
 
   // Called once the command ends or is interrupted.
