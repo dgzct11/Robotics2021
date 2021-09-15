@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,8 +51,10 @@ public class DriveStraightDistance extends CommandBase {
   public void execute() {
       time = System.currentTimeMillis()/1000-startTime+0.04;
       
-      driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity, 1*Constants.position_units_per_meter/10);
-      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity, -1*Constants.position_units_per_meter/10);
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity, 1*Constants.position_units_per_meter/100);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity, -1*Constants.position_units_per_meter/100);
+      driveTrain.leftSpeedC.setNeutralMode(NeutralMode.Coast);
+      driveTrain.rightSpeedC.setNeutralMode(NeutralMode.Coast);
       //driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, time*1*Constants.position_units_per_meter);
       //driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, -time*1*Constants.position_units_per_meter);
   }

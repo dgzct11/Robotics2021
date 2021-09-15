@@ -58,14 +58,18 @@ public class FollowTrajectory extends CommandBase {
     Line lineStart = new Line(currentPosXY, Math.tan(Math.toRadians(currentPosition.angle)));
     Line lineEnd = new Line(newPosXY, Math.tan(Math.toRadians(newPos.angle)));
     double[] center = lineStart.getIntersection(lineEnd);
-    
+    if(currentPosition.angle == newPos.angle){
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity,  1*Constants.position_units_per_meter/timeUnit/1000);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity, -1*Constants.position_units_per_meter/timeUnit/1000);
+      return;
+    }
     double radius = RobotContainer.distance(center, currentPosXY);
     double theta = 2*Math.asin(RobotContainer.distance(currentPosXY, newPosXY)/2/radius);
     double outer = theta*(radius+Constants.distance_between_wheels/2);
     double inner = theta*(radius - Constants.distance_between_wheels/2);
     if(RobotContainer.shouldTurnLeft(currentPosition.angle, newPos.angle)){
       driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity,  inner*Constants.position_units_per_meter/timeUnit/10);
-      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity,  outer*Constants.position_units_per_meter/timeUnit/10);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity,  -outer*Constants.position_units_per_meter/timeUnit/10);
     }
     else{
       driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity, outer * Constants.position_units_per_meter/timeUnit/10);

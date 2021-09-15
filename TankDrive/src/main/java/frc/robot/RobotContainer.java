@@ -28,6 +28,7 @@ import frc.robot.commands.AutonomusCommands;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.DriveStraightDistance;
+import frc.robot.commands.EditConstant;
 import frc.robot.commands.EmergencyStop;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.SwitchDriveMode;
@@ -82,6 +83,8 @@ public class RobotContainer {
   Button downPad = new POVButton(xbox_controller, Constants.down_pad_num);
 
   Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
+  Button startButtonIncreaseK = new JoystickButton(xbox_controller, Constants.start_button_num);
+  Button endButtonDecreaseK = new JoystickButton(xbox_controller, Constants.back_button_num);
 
   Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
   Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
@@ -132,6 +135,8 @@ public class RobotContainer {
     rightButtonIncMotor.whenPressed(new ChangeMaxSpeed(0.1));
     leftButtonDecMotor.whenPressed(new ChangeMaxSpeed(-0.1));
     bButtonEmergencyStop.whenPressed(new EmergencyStop(driveTrain));
+    startButtonIncreaseK.whenPressed(new EditConstant(driveTrain,0.01));
+    endButtonDecreaseK.whenPressed(new EditConstant(driveTrain, -0.01));
   }
 
   /**
@@ -149,8 +154,8 @@ public class RobotContainer {
       double[] distances = {
         1.1742471872224396,
         };
-    //return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
-        return new DriveStraightDistance(1, 1, driveTrain);
+    return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
+        //return new DriveStraightDistance(1, 1, driveTrain);
   }
 
   public static double navxTo360(double angle){

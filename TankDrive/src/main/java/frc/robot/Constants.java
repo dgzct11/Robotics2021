@@ -51,7 +51,8 @@ public final class Constants {
     public static int driveMode = 0; //0 = tank, 1 = tankstraight
     public static boolean angle_fixed = false;
 	public static double kvVoltSecondsPerMeter;
-    
+	public static int start_button_num = 8;
+    public static int back_button_num = 7;    
 
     public static final double ksVolts = 0.22;
     public static final double kvVoltSecondPerMeter = 1.98;
