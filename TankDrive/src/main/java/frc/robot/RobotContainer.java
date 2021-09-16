@@ -28,12 +28,19 @@ import frc.robot.commands.AutonomusCommands;
 import frc.robot.commands.ChangeMaxSpeed;
 import frc.robot.commands.DisplayMPX;
 import frc.robot.commands.DriveStraightDistance;
+import frc.robot.commands.EditConstant;
+import frc.robot.commands.EmergencyStop;
+import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnAngle;
+import frc.robot.commands.UpdatePosition;
+import frc.robot.functional.Circle;
+import frc.robot.functional.Line;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.NavXGyro;
+import frc.robot.subsystems.Odometry;
 //import jdk.vm.ci.meta.Constant;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -56,12 +63,13 @@ public class RobotContainer {
   //subsystems
   private final NavXGyro navx;
   private final DriveTrain driveTrain;
+  Odometry odometry;
 
   //commands
   private final TankDrive tankDrive;
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
-
+  private final UpdatePosition up;
   public static boolean inAuto = false;
 
   //Buttons
@@ -75,9 +83,12 @@ public class RobotContainer {
   Button downPad = new POVButton(xbox_controller, Constants.down_pad_num);
 
   Button xButtonSwitchDrive = new JoystickButton(xbox_controller, Constants.x_button_num);
+  Button startButtonIncreaseK = new JoystickButton(xbox_controller, Constants.start_button_num);
+  Button endButtonDecreaseK = new JoystickButton(xbox_controller, Constants.back_button_num);
 
   Button rightButtonIncMotor = new JoystickButton(xbox_controller, Constants.rb_button_num);
   Button leftButtonDecMotor = new JoystickButton(xbox_controller, Constants.lb_button_num);
+  Button bButtonEmergencyStop = new JoystickButton(xbox_controller, Constants.b_button_num);
   DriveStraightDistance driveStraightDistance;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -85,19 +96,21 @@ public class RobotContainer {
     //subsytems 
     driveTrain = new DriveTrain();
     navx = new NavXGyro();
-    
+    odometry = new Odometry(driveTrain);
     //commands
     tankDrive = new TankDrive(driveTrain);
     tankDrive.addRequirements(driveTrain);
-  
+
+    up = new UpdatePosition(odometry);
     tn = new TurnAngle(driveTrain, 90);
     tn.addRequirements(navx);
     tn.addRequirements(driveTrain);
-    displayMPX = new DisplayMPX(navx);
+    displayMPX = new DisplayMPX(navx,odometry,driveTrain);
     displayMPX.addRequirements(navx);
-   
+    up.addRequirements(odometry);
     driveTrain.setDefaultCommand(tankDrive);
     navx.setDefaultCommand(displayMPX);
+    odometry.setDefaultCommand(up);
     configureButtonBindings();
     driveStraightDistance = new DriveStraightDistance(0.5, 0, driveTrain);
     
@@ -121,6 +134,9 @@ public class RobotContainer {
     xButtonSwitchDrive.whenPressed(new SwitchDriveMode(driveTrain, navx));
     rightButtonIncMotor.whenPressed(new ChangeMaxSpeed(0.1));
     leftButtonDecMotor.whenPressed(new ChangeMaxSpeed(-0.1));
+    bButtonEmergencyStop.whenPressed(new EmergencyStop(driveTrain));
+    startButtonIncreaseK.whenPressed(new EditConstant(driveTrain,0.01));
+    endButtonDecreaseK.whenPressed(new EditConstant(driveTrain, -0.01));
   }
 
   /**
@@ -130,9 +146,73 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomusCommands(driveTrain);
+    double[][] points = {
+      {0.0,0.0},
+      {0.17,2.13},
+      {2.42,2.07}
+      };
+      double[] distances = {
+        1.1742471872224396,
+        };
+    return new FollowTrajectory(driveTrain, odometry, points, distances);//new AutonomusCommands(driveTrain);
+        //return new DriveStraightDistance(1, 1, driveTrain);
   }
 
+  public static double navxTo360(double angle){
+        
+    if (angle<=0) angle += 360;
+
+    return 360-angle;
+  }
+  public static double to360(double angle) {
+    if (angle <= 0) angle += 360;
+
+    return Math.abs(angle%360);
+  }
+  public static double stickTo360(double x, double y){
+   return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
+  }
+  public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
+    double angle = navxTo360(currentNavxAngle);
+    boolean value = false;
+
+    if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
+    else value = angle<targetAngle && angle> targetAngle-180;
+    return value;
+  }
+  public static boolean shouldTurnLeftAngle(double currentNavxAngle, double targetAngle){
+    double angle = currentNavxAngle;
+    boolean value = false;
+
+    if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
+    else value = angle<targetAngle && angle> targetAngle-180;
+    return value;
+  }
+  public static boolean currentAngleEquals(double angle){
+    double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
+    return ( shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error) ) && !(shouldTurnLeft((currentAngle+90)%360,angle));
+  }
+  public static double angleDistance(double targetAngle){
+    double angle = navxTo360(NavXGyro.ahrs.getYaw());
+    double distance = Math.abs(targetAngle - angle)%360;
+    if (distance > 180) distance = 360 - distance;
+    return distance;
+  }
+
+  public static double distance(double[] p1, double[] p2){
+    return Math.sqrt( Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[0] - p2[0], 2));
+  }
+
+  public static double getArcLength(Circle circle){
+    Line base = new Line(circle.startPoint, circle.endPoint);
+    double[] midPoint = base.getMidPoint();
+    double halfAngle = Math.atan(distance(midPoint, base.startPoint)/distance(midPoint, circle.center));
+    return halfAngle*2*circle.radius;
+  }
+
+  public static double angleFromSlope(double[] start, double[] end){
+    return Math.toDegrees(Math.atan2((end[1] - start[1]), end[0] - start[0]));
+  }
 /*
   public Command getPathFollowCommand(){
    

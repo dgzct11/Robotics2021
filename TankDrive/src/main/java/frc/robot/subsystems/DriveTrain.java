@@ -9,21 +9,26 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Encoder;
+
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   
-  TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
-  TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
+  public TalonSRX leftSpeedC = new TalonSRX(Constants.left_motor_port);
+  public TalonSRX rightSpeedC = new TalonSRX(Constants.right_motor_port);
+  
   //leftSpeedC = CTRE.Creator.createMasterTalon(Constants.leftSpeedC);
   public double currentLeft = 0;
   public double currentRight = 0;
-  
+  int loopIDX = 0;
+   double kd = 0.05;
+  public double kp = .001;
+  double ki = 0;
+  double kf = 1;
   /*private final Encoder m_leftEncoder 
       new Encoder(Constants.kLeftEncoderPort,
                   Constants.kLeftEncoderReversed);*/
@@ -33,9 +38,24 @@ public class DriveTrain extends SubsystemBase {
       new Encoder(Constants.kRightEncoderPort,Constants.kRightEncoderReversed);*/
   /** Creates a new DriveTrain. */
   public DriveTrain() {
-    leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
-    rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.PID_TYPE, 10);
-    leftSpeedC.set(ControlMode.MotionMagic, demand);
+    
+    
+    leftSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
+    rightSpeedC.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, Constants.PID_TYPE, 10);
+    leftSpeedC.configMotionAcceleration(Constants.max_acceleration*Constants.position_units_per_meter/10);
+    rightSpeedC.configMotionAcceleration(Constants.max_acceleration*Constants.position_units_per_meter/10);
+    leftSpeedC.setNeutralMode(NeutralMode.Brake);
+    rightSpeedC.setNeutralMode(NeutralMode.Brake);
+ 
+    leftSpeedC.config_kP(loopIDX, kp);
+    leftSpeedC.config_kI(loopIDX, ki);
+    leftSpeedC.config_kD(loopIDX, kd);
+    leftSpeedC.config_kF(loopIDX, kf);
+    rightSpeedC.config_kP(loopIDX, kp);
+    rightSpeedC.config_kI(loopIDX, ki);
+    rightSpeedC.config_kF(loopIDX, kf);
+    rightSpeedC.config_kD(loopIDX, kd);
+    //leftSpeedC.set(ControlMode.MotionMagic, demand);
   }
 
   public void setRightMotor(double speed){
@@ -76,6 +96,14 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    leftSpeedC.config_kP(loopIDX, kp);
+    leftSpeedC.config_kI(loopIDX, ki);
+    leftSpeedC.config_kD(loopIDX, kd);
+    leftSpeedC.config_kF(loopIDX, kf);
+    rightSpeedC.config_kP(loopIDX, kp);
+    rightSpeedC.config_kI(loopIDX, ki);
+    rightSpeedC.config_kF(loopIDX, kf);
+    rightSpeedC.config_kD(loopIDX, kd);
     
   }
 }

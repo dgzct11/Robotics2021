@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -25,6 +28,7 @@ public class DriveStraightDistance extends CommandBase {
   double previous_error = 0;
   double error = 0;
   double value = 0;
+  double startTime = 0;
   public DriveStraightDistance(double d, double a, DriveTrain dt) {
     // Use addRequirements() here to declare subsystem dependencies.
     distance = d;
@@ -37,33 +41,22 @@ public class DriveStraightDistance extends CommandBase {
   public void initialize() {
     NavXGyro.ahrs.resetDisplacement();
     RobotContainer.inAuto = true;
+    startTime = System.currentTimeMillis()/1000;
+    driveTrain.leftSpeedC.setSelectedSensorPosition(0);
+      driveTrain.rightSpeedC.setSelectedSensorPosition(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("going", "now");
-    SmartDashboard.putNumber("Value", value);
-    
-    
-    
-    
-      double speed = Constants.max_motor_percent;
+      time = System.currentTimeMillis()/1000-startTime+0.04;
       
-      error = Constants.angleDistance(angle);
-      Constants.angle_correction_multiplier = Math.max(1, kp*error + ki*error*time + kd*(error-previous_error)/time);
-      if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
-            //turn left
-            driveTrain.setLeftMotor(speed/Constants.angle_correction_multiplier);
-            driveTrain.setRightMotor(speed);
-        }
-        else{
-            //turn right
-            driveTrain.setLeftMotor(speed);
-            driveTrain.setRightMotor(speed/Constants.angle_correction_multiplier);
-        }
-        previous_error = error;
-    
+      driveTrain.leftSpeedC.set(TalonSRXControlMode.Velocity, 1*Constants.position_units_per_meter/100);
+      driveTrain.rightSpeedC.set(TalonSRXControlMode.Velocity, -1*Constants.position_units_per_meter/100);
+      driveTrain.leftSpeedC.setNeutralMode(NeutralMode.Coast);
+      driveTrain.rightSpeedC.setNeutralMode(NeutralMode.Coast);
+      //driveTrain.leftSpeedC.set(TalonSRXControlMode.Position, time*1*Constants.position_units_per_meter);
+      //driveTrain.rightSpeedC.set(TalonSRXControlMode.Position, -time*1*Constants.position_units_per_meter);
   }
 
   // Called once the command ends or is interrupted.
@@ -77,8 +70,6 @@ public class DriveStraightDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean value = NavXGyro.ahrs.getDisplacementX() <= distance + Constants.distance_error && NavXGyro.ahrs.getDisplacementX()>= distance - Constants.distance_error;
-    
-    return value;
+   return time>3;
   }
 }

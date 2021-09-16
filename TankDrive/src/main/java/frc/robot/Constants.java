@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.subsystems.NavXGyro;
 
 /**
@@ -38,7 +38,7 @@ public final class Constants {
     public static final int b_button_num = 2;
     public static final int x_button_num = 3;
     public static final int y_button_num = 4;
-
+    
     //placeholder ports
     public static final int left_pad_num = 270;
     public static final int right_pad_num = 90;
@@ -51,7 +51,8 @@ public final class Constants {
     public static int driveMode = 0; //0 = tank, 1 = tankstraight
     public static boolean angle_fixed = false;
 	public static double kvVoltSecondsPerMeter;
-    
+	public static int start_button_num = 8;
+    public static int back_button_num = 7;    
 
     public static final double ksVolts = 0.22;
     public static final double kvVoltSecondPerMeter = 1.98;
@@ -68,36 +69,8 @@ public final class Constants {
 	public static final DigitalSource kRightEncoderPort = null;
 	public static final DigitalSource kRightEncoderReversed = null;
     public static final int PID_TYPE = 0;
-    public static double navxTo360(double angle){
-        
-        if (angle<=0) angle += 360;
-
-        return 360-angle;
-    }
-    public static double to360(double angle) {
-        if (angle <= 0) angle += 360;
-
-        return Math.abs(angle%360);
-    }
-    public static double stickTo360(double x, double y){
-       return (to360(Math.toDegrees(Math.atan2(-y,x)))+270)%360;
-    }
-    public static boolean shouldTurnLeft(double currentNavxAngle, double targetAngle){
-        double angle = navxTo360(currentNavxAngle);
-        boolean value = false;
-
-        if(targetAngle < 180) value = angle<targetAngle || angle> 180+targetAngle;
-        else value = angle<targetAngle && angle> targetAngle-180;
-        return value;
-    }
-    public static boolean currentAngleEquals(double angle){
-        double currentAngle = navxTo360(NavXGyro.ahrs.getYaw());
-        return ( shouldTurnLeft(currentAngle, angle+Constants.angle_error) ^ shouldTurnLeft(currentAngle, angle-Constants.angle_error) ) && !(shouldTurnLeft((currentAngle+90)%360,angle));
-    }
-    public static double angleDistance(double targetAngle){
-        double angle = navxTo360(NavXGyro.ahrs.getYaw());
-        double distance = Math.abs(targetAngle - angle)%360;
-        if (distance > 180) distance = 360 - distance;
-        return distance;
-    }
+    public static final double position_units_per_meter =(10277+11467)*(1/0.479);
+    public static final double distance_between_wheels = 0.698;
+    public static final double max_acceleration = .2;
+    
 }

@@ -8,7 +8,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavXGyro;
 
@@ -43,7 +43,7 @@ public class TurnAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    previous_error = Constants.angleDistance(angle);
+    previous_error = RobotContainer.angleDistance(angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,12 +51,12 @@ public class TurnAngle extends CommandBase {
   public void execute() {
     
     SmartDashboard.putNumber("time", time);
-    error = Constants.angleDistance(angle);
+    error = RobotContainer.angleDistance(angle);
     double p_output = kp*error + ki*error*time + kd*(error-previous_error)/time;
     if(p_output>0) p_output = Math.min(p_output, Constants.max_motor_percent);
     else p_output = Math.max(p_output, -Constants.max_motor_percent);
     SmartDashboard.putNumber("PID Error", p_output);
-    if(Constants.shouldTurnLeft(NavXGyro.ahrs.getYaw(), angle)){
+    if(RobotContainer.shouldTurnLeft(NavXGyro.ahrs.getAngle(), angle)){
         //turn right
         driveTrain.spin(-1*p_output);
     }
@@ -80,7 +80,7 @@ public class TurnAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean value = Constants.currentAngleEquals(angle);  
+    boolean value = RobotContainer.currentAngleEquals(angle);  
     if(value) driveTrain.stop();
     return value;
   }

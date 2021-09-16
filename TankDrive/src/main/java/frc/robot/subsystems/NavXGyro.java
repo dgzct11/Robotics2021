@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,7 +16,9 @@ public class NavXGyro extends SubsystemBase {
   public NavXGyro() {
     ahrs = new AHRS(Constants.mxp_port);
   }
-
+  public static double getAngle(){
+    return RobotContainer.navxTo360(ahrs.getAngle());
+  }
   
   @Override
   public void periodic() {
