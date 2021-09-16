@@ -1,2 +1,11 @@
+Autonomus
+    1. Path following
+    2. Lining up with target
+    3. activating subsystem
+Teleop
+    1. drivability
+        a. reducing field oriented drive wobbling
+    2. autonomized shortcuts
+    3. path finding
 Todo
-Ideas
+    fix path following
