@@ -24,6 +24,9 @@ public class Odometry extends SubsystemBase {
     driveTrain.rightSpeedC.setSelectedSensorPosition(0);
   }
 
+  public void reset(){
+    currentPosition = new Position(0, 0, 0);
+  }
   public void updatePosition(){
     //figure out change in angle
     double currentPosLeft = driveTrain.leftSpeedC.getSelectedSensorPosition()/Constants.position_units_per_meter;

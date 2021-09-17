@@ -213,6 +213,20 @@ public class RobotContainer {
   public static double angleFromSlope(double[] start, double[] end){
     return Math.toDegrees(Math.atan2((end[1] - start[1]), end[0] - start[0]));
   }
+  public static double slopeFromAngle(double angle){
+    if(angle == 0 || angle== 180)
+      return Double.POSITIVE_INFINITY;
+    else if(angle == 90 || angle == 270)
+      return 0;
+    return Math.tan(Math.toRadians(angle+90));
+  }
+
+  public static double angleToPoint(double[] start, double[] end){
+    double dx = end[0]-start[0];
+    double dy = end[1]-start[1];
+    return to360(Math.toDegrees(Math.atan2(-dx, dy)));
+
+  }
 /*
   public Command getPathFollowCommand(){
    
