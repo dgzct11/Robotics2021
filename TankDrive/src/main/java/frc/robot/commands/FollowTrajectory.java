@@ -80,11 +80,13 @@ public class FollowTrajectory extends CommandBase {
 
   public static double[] getSpeed(double[] start, double[] end, double angle){
     //returns left right
-    double m = RobotContainer.slopeFromAngle(angle);
+    double m = RobotContainer.slopeFromAngle(angle+90);
     double x,y;
     double a = 2*end[0] - 2*start[0];
     double b = 2*end[1] - 2*start[1];
     double speed = 0;
+    double maxValue = 10000;
+    double minValue = 0.000001;
     double c = end[0] * end[0] - start[0]*start[0] + end[1]*end[1] - start[1]*start[1];
     
     if(Double.isInfinite(m)){
@@ -106,7 +108,8 @@ public class FollowTrajectory extends CommandBase {
         y = m*(x-start[0]) + start[1];
        
     }
-    
+   
+    System.out.println(x + " " + y+" "+m);
     if(Double.isInfinite(x) || Double.isInfinite(y)){
         speed = RobotContainer.distance(start, end);
         double[] result = {speed, speed};
