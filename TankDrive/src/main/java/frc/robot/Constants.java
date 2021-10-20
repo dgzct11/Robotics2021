@@ -73,9 +73,9 @@ public final class Constants {
     public static final double distance_between_wheels = 0.698;
     public static final double max_acceleration = .2;
 
-    public static final int left_jstick_port = 0;
+    public static final int left_jstick_port = 1;
     public static final int left_j_y_axis = 1;
     public static final int right_j_y_axis = 1;
-    public static final int right_j_stick_port = 1;
+    public static final int right_j_stick_port = 0;
     
 }
