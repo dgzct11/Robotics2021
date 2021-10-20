@@ -28,7 +28,7 @@ public final class Constants {
     public static final int right_y_axis = 5;
     public static final int right_x_axis = 4;
     public static final int left_motor_port = 0;
-    public static  double max_motor_percent = 0.3;
+    public static  double max_motor_percent = 1;
     public static final Port mxp_port = Port.kMXP;
     public static final double angle_error = 0.1;
     public static final double spin_rate = 0.2;
@@ -72,5 +72,10 @@ public final class Constants {
     public static final double position_units_per_meter =(10277+11467)*(1/0.479);
     public static final double distance_between_wheels = 0.698;
     public static final double max_acceleration = .2;
+
+    public static final int left_jstick_port = 0;
+    public static final int left_j_y_axis = 1;
+    public static final int right_j_y_axis = 1;
+    public static final int right_j_stick_port = 1;
     
 }

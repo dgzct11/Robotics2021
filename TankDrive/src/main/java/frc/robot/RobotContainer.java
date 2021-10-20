@@ -33,6 +33,7 @@ import frc.robot.commands.EmergencyStop;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.SwitchDriveMode;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.TankDriveJ;
 import frc.robot.commands.TurnAngle;
 import frc.robot.commands.UpdatePosition;
 import frc.robot.functional.Circle;
@@ -59,14 +60,16 @@ public class RobotContainer {
 
   //devices
    public  static XboxController xbox_controller = new XboxController(Constants.xbox_port);
- 
+  public static XboxController leftController = new XboxController(Constants.left_jstick_port);
+  public static XboxController rightController = new XboxController(Constants.right_j_stick_port);
+
   //subsystems
   private final NavXGyro navx;
   private final DriveTrain driveTrain;
   Odometry odometry;
 
   //commands
-  private final TankDrive tankDrive;
+  private final TankDriveJ tankDrive;
   private final DisplayMPX displayMPX;
   private final TurnAngle tn;
   private final UpdatePosition up;
@@ -98,7 +101,7 @@ public class RobotContainer {
     navx = new NavXGyro();
     odometry = new Odometry(driveTrain);
     //commands
-    tankDrive = new TankDrive(driveTrain);
+    tankDrive = new TankDriveJ(driveTrain);
     tankDrive.addRequirements(driveTrain);
 
     up = new UpdatePosition(odometry);
